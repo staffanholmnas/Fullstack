@@ -24,3 +24,5 @@ note over Browser:
 The event handler is run and  
 the message is shown  
 end note  
+
+![Sequence diagram](/assets/Exercise_0.4.png)
