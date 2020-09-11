@@ -24,14 +24,13 @@ const App = () => {
 const Header = (props) => {
   return (
     <div>
-      <p>
         <h1>{props.course}</h1>
-      </p>
     </div>
   )
 }
 
 const Content = (props) => {
+ 
   return (
     <div>
       <Part part={props.part1} exercises={props.exercises1} />
