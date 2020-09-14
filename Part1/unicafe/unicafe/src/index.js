@@ -28,9 +28,9 @@ const App = () => {
         />
       </>
       <h1>statistics</h1>
-      <Display good={"good " + good} />
-      <Display neutral={"neutral " + neutral} />
-      <Display bad={"bad " + bad} />
+      <Display show={"good " + good} />
+      <Display show={"neutral " + neutral} />
+      <Display show={"bad " + bad} />
     </>
   )
 }
@@ -41,7 +41,7 @@ const Button = ({ handleClick, text }) => (
   </button>
 )
 
-const Display = ({ good, neutral, bad }) => <div>  {good}  {neutral}  {bad}</div>
+const Display = ({ show }) => <div>{show}</div>
 
 ReactDOM.render(<App />,
   document.getElementById('root')
