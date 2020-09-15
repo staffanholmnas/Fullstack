@@ -27,12 +27,12 @@ const App = () => {
           text="Bad"
         />
       </>
-      <>{Statistics(good, bad, neutral)}</>
+      <Statistics good = {good} bad = {bad} neutral = {neutral}/>
     </>
   )
 }
 
-const Statistics = (good, bad, neutral) => {
+const Statistics = ({good, bad, neutral}) => {
   const all = good + bad + neutral
   return (
   <>
