@@ -10,7 +10,35 @@ const App = () => {
   const increaseNeutral = () => setNeutral(neutral + 1)
   const increaseBad = () => setBad(bad + 1)
 
-  return (
+  const statistics = <Statistics good={good} bad={bad} neutral={neutral} />
+
+  let combinedFeedback = good + bad + neutral
+
+  if (combinedFeedback === 0) {
+
+    return (
+      <>
+        <h1>give feedback</h1>
+        <>
+          <Button
+            handleClick={increaseGood}
+            text="Good"
+          />
+          <Button
+            handleClick={increaseNeutral}
+            text="Neutral"
+          />
+          <Button
+            handleClick={increaseBad}
+            text="Bad"
+          />
+        </>
+        <h1>statistics</h1>
+        <h3>No feedback given</h3>
+      </>
+    )
+  }
+  else return (
     <>
       <h1>give feedback</h1>
       <>
@@ -26,24 +54,24 @@ const App = () => {
           handleClick={increaseBad}
           text="Bad"
         />
+        <>{statistics}</>
       </>
-      <Statistics good = {good} bad = {bad} neutral = {neutral}/>
     </>
   )
 }
 
-const Statistics = ({good, bad, neutral}) => {
+const Statistics = ({ good, bad, neutral }) => {
   const all = good + bad + neutral
   return (
-  <>
-    <h1>statistics</h1>
-    <Display show={"good " + good} />
-    <Display show={"neutral " + neutral} />
-    <Display show={"bad " + bad} />
-    <Display show={"all " + all} />
-    <Display show={"average " + Avg(all, good, bad)} />
-    <Display show={"positive " + Percentage(all, good) + " %"} />
-  </>
+    <>
+      <h1>statistics</h1>
+      <Display show={"good " + good} />
+      <Display show={"neutral " + neutral} />
+      <Display show={"bad " + bad} />
+      <Display show={"all " + all} />
+      <Display show={"average " + Avg(all, good, bad)} />
+      <Display show={"positive " + Percentage(all, good) + " %"} />
+    </>
   )
 }
 
