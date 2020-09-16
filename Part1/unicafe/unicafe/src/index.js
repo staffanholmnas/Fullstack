@@ -50,14 +50,28 @@ const Statistics = ({ good, bad, neutral }) => {
   const all = good + bad + neutral
   return (
     <>
-
-      <Statistic text="good " value={good} />
-      <Statistic text="neutral " value={neutral} />
-      <Statistic text="bad " value={bad} />
-      <Statistic text="all " value={all} />
-      <Statistic text="average " value={(good - bad) / all} />
-      <Statistic text="positive " value={good / all * 100 + " %"} />
-
+      <table>
+        <tbody>
+          <tr>
+            <td><Statistic text="good " /></td><td><Statistic value={good} /></td>
+          </tr>
+          <tr>
+            <td><Statistic text="neutral " /></td><td><Statistic value={neutral} /></td>
+          </tr>
+          <tr>
+            <td><Statistic text="bad " /></td><td><Statistic value={bad} /></td>
+          </tr>
+          <tr>
+            <td><Statistic text="all " /></td><td><Statistic value={all} /></td>
+          </tr>
+          <tr>
+            <td><Statistic text="average " /></td><td><Statistic value={(good - bad) / all} /></td>
+          </tr>
+          <tr>
+            <td><Statistic text="positive " /></td><td><Statistic value={good / all * 100 + " %"} /></td>
+          </tr>
+        </tbody>
+      </table>
     </>
   )
 }
@@ -66,25 +80,7 @@ const Statistic = ({ text, value }) => (<Display text={text} value={value} />)
 
 const Button = ({ handleClick, text }) => (<button onClick={handleClick}> {text} </button>)
 
-const Display = ({ text, value }) => {
-  return (
-    <table>
-      <tbody>
-        <tr>
-          <td>
-            {text}
-          </td>
-          <td>
-            ----
-          </td>
-          <td>
-            {value}
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  )
-}
+const Display = (props) => <div> {props.text} {props.value} </div>
 
 ReactDOM.render(<App />,
   document.getElementById('root')
