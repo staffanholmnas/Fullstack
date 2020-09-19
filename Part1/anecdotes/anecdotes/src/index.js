@@ -4,15 +4,20 @@ import ReactDOM from 'react-dom'
 const App = (props) => {
   const [selected, setSelected] = useState(0)
 
-  const handleClick = () => setSelected(selected + 1)
-
   let random = Math.floor(Math.random() * 6)
-  
+
+  const randomizeState = () => {
+    while (random === selected) {
+      random = Math.floor(Math.random() * 6)
+    }
+    setSelected(random)
+  }
+
   return (
     <div>
-      {props.anecdotes[random]}
+      {props.anecdotes[selected]}
       <br></br>
-      <button onClick={handleClick}>next anecdote</button>
+      <Button handleClick={randomizeState} text="next anecdote" />
     </div>
   )
 }
@@ -25,6 +30,8 @@ const anecdotes = [
   'Premature optimization is the root of all evil.',
   'Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it.'
 ]
+
+const Button = (props) => (<button onClick={props.handleClick}> {props.text} </button>)
 
 ReactDOM.render(
   <App anecdotes={anecdotes} />,
