@@ -2,33 +2,37 @@ import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
 
 const App = (props) => {
+  // Create an array with 7 elements filled with zeroes when starting app.
   const stateArray = new Array(7 + 1).join('0').split('').map(parseFloat)
+
   const [selected, setSelected] = useState(stateArray)
 
-  let random = Math.floor(Math.random() * 6)
+  let random = Math.floor(Math.random() * 6) 
   
   const randomizeState = () => {
-    while (random === selected[0]) {
+    // Make sure that we update to a different state everytime.
+    while (random === selected[0]) {  
       random = Math.floor(Math.random() * 6)
     }
-    const copyOfStateArray = [...selected]
+    const copyOfStateArray = [...selected]  // Copy the array of the current state.
     copyOfStateArray[0] = random
-    setSelected(copyOfStateArray)
+    setSelected(copyOfStateArray) // Update the state.
   }
 
-  console.log(random, selected)
+  // Debug the behavior.
+  // console.log(random, selected)
 
   const storeVote = () => {
-    const copyOfStateArray = [...selected]
-    copyOfStateArray[selected[0] + 1]++
+    const copyOfStateArray = [...selected]  // Copy the state array.
+    copyOfStateArray[selected[0] + 1]++ // Add 1 to the element that corresponds to the current state.
     setSelected(copyOfStateArray)
-    console.log(copyOfStateArray[selected[0] + 1])
+    // console.log(copyOfStateArray[selected[0] + 1])
   }
 
   return (
-    <div>
+    <div style={{fontSize: '120%' }}>
       {props.anecdotes[selected[0]]}
-      <p>has {selected[selected[0] + 1]} votes</p>
+      <div>has {selected[selected[0] + 1]} votes</div>
       <Button handleClick={storeVote} text="vote" />
       <Button handleClick={randomizeState} text="next anecdote" />
     </div>
