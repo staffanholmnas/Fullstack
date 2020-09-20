@@ -7,11 +7,10 @@ const App = (props) => {
 
   const [selected, setSelected] = useState(stateArray)
 
-  let random = Math.floor(Math.random() * 6) 
-  
   const randomizeState = () => {
+    let random = Math.floor(Math.random() * 6)
     // Make sure that we update to a different state everytime.
-    while (random === selected[0]) {  
+    while (random === selected[0]) {
       random = Math.floor(Math.random() * 6)
     }
     const copyOfStateArray = [...selected]  // Copy the array of the current state.
@@ -19,8 +18,8 @@ const App = (props) => {
     setSelected(copyOfStateArray) // Update the state.
   }
 
-  // Debug the behavior.
-  // console.log(random, selected)
+  // Debug the behavior
+  // console.log(selected)
 
   const storeVote = () => {
     const copyOfStateArray = [...selected]  // Copy the state array.
@@ -29,12 +28,22 @@ const App = (props) => {
     // console.log(copyOfStateArray[selected[0] + 1])
   }
 
+  const getMaxVotedAnecdote = () => {
+    const copyOfStateArray = [...selected]
+    copyOfStateArray.shift()  // Remove the first element of the copied array, i.e. the element that contains the states.
+    let mostVotes = copyOfStateArray.indexOf(Math.max(...copyOfStateArray)) // Gets the index of the element with the highest value.
+    return props.anecdotes[mostVotes]
+  }
+
   return (
-    <div style={{fontSize: '120%' }}>
+    <div style={{ fontSize: '120%' }}>
+      <h2>Anecdote of the day</h2>
       {props.anecdotes[selected[0]]}
       <div>has {selected[selected[0] + 1]} votes</div>
       <Button handleClick={storeVote} text="vote" />
       <Button handleClick={randomizeState} text="next anecdote" />
+      <h2>Anecdote with most votes</h2>
+      {getMaxVotedAnecdote()}
     </div>
   )
 }
