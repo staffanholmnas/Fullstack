@@ -35,6 +35,13 @@ const App = (props) => {
     return props.anecdotes[mostVotes]
   }
 
+  const getMaxVotes = () => {
+    const copyOfStateArray = [...selected]
+    let maxVotes = Math.max(...copyOfStateArray)
+    return maxVotes
+  }
+
+
   return (
     <div style={{ fontSize: '120%' }}>
       <h2>Anecdote of the day</h2>
@@ -43,7 +50,8 @@ const App = (props) => {
       <Button handleClick={storeVote} text="vote" />
       <Button handleClick={randomizeState} text="next anecdote" />
       <h2>Anecdote with most votes</h2>
-      {getMaxVotedAnecdote()}
+      <div>{getMaxVotedAnecdote()}</div>
+      <>has {getMaxVotes()} votes</>
     </div>
   )
 }
