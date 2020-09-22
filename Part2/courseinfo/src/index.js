@@ -61,10 +61,10 @@ const Content = ({ course }) => {
 const Total = ({ course }) => {
   let sum = course.parts.reduce((total, currentValue) => {
     return total + currentValue.exercises;
-}, 0)
+  }, 0)
 
   return (
-    <div style ={{fontWeight: "bold"}}>
+    <div style={{ fontWeight: "bold" }}>
       <p>
         total of {sum} exercises
       </p>
