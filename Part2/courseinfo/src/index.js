@@ -42,7 +42,15 @@ const Course = ({ course }) => {
 
 const Header = ({ course }) => <><h1>{course.name}</h1></>
 
-const Content = ({ course }) =><>{course.parts.map(line => <Part key={line.id} name={line.name} exercises={line.exercises} id={line.id} />)}</>
+const Content = ({ course }) => {
+  return (
+    <>
+      {course.parts.map(line =>
+        <Part key={line.id} name={line.name} exercises={line.exercises} id={line.id} />
+      )}
+    </>
+  )
+}
 
 const Part = (props) => <><p>{props.name} {props.exercises}</p></>
 
