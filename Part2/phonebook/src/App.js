@@ -47,7 +47,7 @@ const App = () => {
     setNewFilter(event.target.value)
   }
 
-  const showMatches = () => {
+  const getMatches = () => {
 
     let copyOfPersons = [...persons]
     let copyOfFilter = newFilter
@@ -92,7 +92,7 @@ const App = () => {
       </form>
       <h2>Numbers</h2>
       <div>
-        {showMatches()
+        {getMatches()
           .map(line => {
             return (
               <div key={line.name}>
