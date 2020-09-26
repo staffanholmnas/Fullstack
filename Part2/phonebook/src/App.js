@@ -1,4 +1,7 @@
 import React, { useState } from 'react'
+import Persons from './components/Persons'
+import Filter from './components/Filter'
+import PersonForm from './components/PersonForm'
 
 const App = () => {
   const [persons, setPersons] = useState([
@@ -47,62 +50,20 @@ const App = () => {
     setNewFilter(event.target.value)
   }
 
-  const getMatches = () => {
-
-    let copyOfPersons = [...persons]
-    let copyOfFilter = newFilter
-
-    let personObjects = copyOfPersons.filter(s => s.name.toUpperCase()
-      .includes(copyOfFilter.toUpperCase()))
-
-    if (copyOfFilter.length === 0) {
-      return []
-    }
-
-    return personObjects
-  }
-
   return (
     <div>
       <h2>Phonebook</h2>
-      <div>
-        filter shown with <input
-          value={newFilter}
-          onChange={handleFilterChange} />
-      </div>
-      <h2>
-        add a new
-            </h2>
-      <form onSubmit={addPerson}>
-        <div>
-          name: <input
-            value={newName}
-            onChange={handleNameChange}
-          />
-        </div>
-        <div>
-          number: <input
-            value={newNumber}
-            onChange={handleNumberChange}
-          />
-        </div>
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
-      <h2>Numbers</h2>
-      <div>
-        {getMatches()
-          .map(line => {
-            return (
-              <div key={line.name}>
-                {line.name}
-                {" "}
-                {line.number}
-              </div>
-            )
-          })}
-      </div>
+      <Filter value={newFilter} onChange={handleFilterChange} />
+      <h3>add a new</h3>
+      <PersonForm 
+      onSubmit={addPerson} 
+      nameValue={newName} 
+      nameOnChange={handleNameChange} 
+      numberValue={newNumber}
+      numberOnChange={handleNumberChange}
+      />
+      <h3>Numbers</h3>
+      <Persons persons={persons} newFilter={newFilter}/>
     </div>
   )
 }
