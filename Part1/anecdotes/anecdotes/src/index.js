@@ -2,16 +2,16 @@ import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
 
 const App = (props) => {
-  // Create an array with 7 elements filled with zeroes when starting app.
-  const stateArray = new Array(7 + 1).join('0').split('').map(parseFloat)
-
+  // Create an array with n elements filled with zeroes when starting app.
+  const stateArray = new Array(anecdotes.length + 1).fill(0)
+  
   const [selected, setSelected] = useState(stateArray)
 
   const randomizeState = () => {
-    let random = Math.floor(Math.random() * 6)
+    let random = Math.floor(Math.random() * anecdotes.length)
     // Make sure that we update to a different state everytime.
     while (random === selected[0]) {
-      random = Math.floor(Math.random() * 6)
+      random = Math.floor(Math.random() * anecdotes.length)
     }
     const copyOfStateArray = [...selected]  // Copy the array of the current state.
     copyOfStateArray[0] = random
@@ -40,7 +40,6 @@ const App = (props) => {
     let maxVotes = Math.max(...copyOfStateArray)
     return maxVotes
   }
-
 
   return (
     <div style={{ fontSize: '120%' }}>
