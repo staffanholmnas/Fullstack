@@ -9,7 +9,7 @@ const App = (props) => {
 
   const randomizeState = () => {
     let random = Math.floor(Math.random() * anecdotes.length)
-    // Make sure that we update to a different state everytime.
+    // Make sure that we always update to a different state.
     while (random === selected[0]) {
       random = Math.floor(Math.random() * anecdotes.length)
     }
