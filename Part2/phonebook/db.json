@@ -29,6 +29,16 @@
       "name": "Dick Gagger",
       "number": "555 9876543",
       "id": 6
+    },
+    {
+      "name": "Stephen Hawking",
+      "number": "732-151-66425",
+      "id": 7
+    },
+    {
+      "name": "Peter Steele",
+      "number": "555 4569874",
+      "id": 8
     }
   ]
 }
