@@ -2,23 +2,23 @@ import React from 'react'
 
 const Persons = (props) => {
 
-    const getMatches = () => {
-  
-      let copyOfPersons = [...props.persons]
-      let copyOfFilter = props.newFilter
-  
-      let personObjects = copyOfPersons.filter(s => s.name.toUpperCase()
-        .includes(copyOfFilter.toUpperCase()))
-  
-      if (copyOfFilter.length === 0) {
-        return []
-      }
-  
-      return personObjects
+  const getMatches = () => {
+
+    let copyOfPersons = [...props.persons]
+    let copyOfFilter = props.newFilter
+
+    let personObjects = copyOfPersons.filter(s => s.name.toUpperCase()
+      .includes(copyOfFilter.toUpperCase()))
+
+    if (copyOfFilter.length === 0) {
+      return []
     }
-  
-    return (
-      <div>
+
+    return personObjects
+  }
+
+  return (
+    <div>
       {getMatches()
         .map(line => {
           return (
@@ -26,11 +26,12 @@ const Persons = (props) => {
               {line.name}
               {" "}
               {line.number}
+              <button onClick={() => props.deleteperson(line.id, line.name)}>delete</button>
             </div>
           )
         })}
     </div>
-    )
-  }
+  )
+}
 
 export default Persons

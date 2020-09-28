@@ -18,6 +18,19 @@ const App = () => {
       })
   }, [])
 
+  const deletePerson = (id, name) => {
+    if (window.confirm(`Delete ${name} ?`)) {
+      let index = persons.map(find => find.id).indexOf(id)
+      console.log("index to be removed", index)
+      phoneService
+        .deleteObject(id)
+      const copyOfPersons = [...persons]
+      copyOfPersons.splice(index, 1)
+      setPersons(copyOfPersons);
+      setNewName("")
+      setNewNumber("")
+    }
+  }
 
   const addPerson = (event) => {
     event.preventDefault()
@@ -72,7 +85,7 @@ const App = () => {
         numberOnChange={handleNumberChange}
       />
       <h3>Numbers</h3>
-      <Persons persons={persons} newFilter={newFilter} />
+      <Persons persons={persons} newFilter={newFilter} deleteperson={deletePerson} />
     </div>
   )
 }

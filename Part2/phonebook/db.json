@@ -19,26 +19,6 @@
       "name": "Mary Poppendieck",
       "number": "39-23-6423122",
       "id": 4
-    },
-    {
-      "name": "Mick Jagger",
-      "number": "555 1234657",
-      "id": 5
-    },
-    {
-      "name": "Dick Gagger",
-      "number": "555 9876543",
-      "id": 6
-    },
-    {
-      "name": "Stephen Hawking",
-      "number": "732-151-66425",
-      "id": 7
-    },
-    {
-      "name": "Peter Steele",
-      "number": "555 4569874",
-      "id": 8
     }
   ]
 }
