@@ -21,7 +21,6 @@ const App = () => {
   const deletePerson = (id, name) => {
     if (window.confirm(`Delete ${name} ?`)) {
       let index = persons.map(find => find.id).indexOf(id)
-      console.log("index to be removed", index)
       phoneService
         .deleteObject(id)
       const copyOfPersons = [...persons]
@@ -39,10 +38,20 @@ const App = () => {
       number: newNumber
     }
 
-    if (persons.map(name =>
-      name.name)
+    if (persons.map(person =>
+      person.name)
       .includes(newName)) {
-      errorMessage()
+      if (window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)) {
+        let getID = persons.find(item => item.name === newName)
+        let id = getID.id
+          phoneService
+            .update(id, personObject)
+            .then(updatedPerson => {
+              setPersons(persons.map(person => person.id !== id ? person : updatedPerson))
+              setNewName("")
+              setNewNumber("")
+            })
+      }
     }
     else {
       phoneService
@@ -53,11 +62,6 @@ const App = () => {
           setNewNumber("")
         })
     }
-  }
-
-  const errorMessage = () => {
-    let message = `${newName} is already added to phonebook`
-    window.alert(message)
   }
 
   const handleNameChange = (event) => {
