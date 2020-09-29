@@ -96,7 +96,6 @@ const ShowWeather = (props) => {
     axios
       .get(`https://api.openweathermap.org/data/2.5/weather?q=${props.cityName}&appid=${props.apiKey}`)
       .then(response => {
-        console.log('promise fulfilled')
         setResponseObj(response.data)
       })
   }, [props.cityName, props.apiKey])
