@@ -19,52 +19,66 @@ const Countries = (props) => {
 
   return (
     <div>
-      <ShowMatches getmatches={getMatches()} />
+      <ShowMatches getmatches={getMatches()} setNewFilter={props.setNewFilter}/>
     </div>
   )
 }
 
 const ShowMatches = (props) => {
 
-  const showAllMatches = props.getmatches
-  .map(line => {
-    return (
-      <div key={line.name}>
-        {line.name}
-      </div>
-    )
-  })
-
-  const showOneMatch = props.getmatches
-  .map(line => { 
-    return (
-      <div key={line.name}>
-        <h1>{line.name}</h1>
-        <div>capital {line.capital}</div>
-        <div>population {line.population}</div>
-        <h3>languages</h3>
-        <ul>
-          <>{line.languages.map(language => <li key={language.name}> {language.name}</li>)}</>
-        </ul>
-        <div>
-          <img style={{height: 100}}
-      src={line.flag}
-      alt="Country flag"
-      />
-      </div>
-      </div>
-    )
-  })
-  
-  if (showAllMatches.length > 10) {
-    return("Too many matches, specify another filter")
+  const handleShowClick = (name) => {
+    let copyOfName = name
+    props.setNewFilter(copyOfName)
   }
 
-  if (showAllMatches.length === 1) {
-    return showOneMatch
+  if (props.getmatches.length > 10) {
+    return ("Too many matches, specify another filter")
   }
 
-  return  showAllMatches 
+  if (props.getmatches.length === 1) {
+    return <ShowOneMatch getmatches={props.getmatches} />
+  }
+
+  return <ShowAllMatches getmatches={props.getmatches} handleShowClick={handleShowClick} />
+}
+
+const ShowAllMatches = (props) => {
+  return (
+    props.getmatches
+      .map(line => {
+        return (
+          <div key={line.name}>
+            {line.name}
+            <button onClick={() => props.handleShowClick(line.name)}>show</button>
+          </div>
+        )
+      })
+  )
+}
+
+const ShowOneMatch = (props) => {
+  return (
+    props.getmatches
+      .map(line => {
+        return (
+          <div key={line.name}>
+            <h1>{line.name}</h1>
+            <div>capital {line.capital}</div>
+            <div>population {line.population}</div>
+            <h3>languages</h3>
+            <ul>
+              <>{line.languages.map(language => <li key={language.name}> {language.name}</li>)}</>
+            </ul>
+            <div>
+              <img style={{ height: 100 }}
+                src={line.flag}
+                alt="Country flag"
+              />
+            </div>
+          </div>
+        )
+      })
+  )
 }
 
 export default Countries
