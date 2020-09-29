@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
+import axios from 'axios'
 
 const Countries = (props) => {
 
@@ -19,7 +20,7 @@ const Countries = (props) => {
 
   return (
     <div>
-      <ShowMatches getmatches={getMatches()} setNewFilter={props.setNewFilter}/>
+      <ShowMatches getmatches={getMatches()} setNewFilter={props.setNewFilter} />
     </div>
   )
 }
@@ -57,6 +58,7 @@ const ShowAllMatches = (props) => {
 }
 
 const ShowOneMatch = (props) => {
+  const API_KEY = process.env.REACT_APP_API_KEY;
   return (
     props.getmatches
       .map(line => {
@@ -65,7 +67,7 @@ const ShowOneMatch = (props) => {
             <h1>{line.name}</h1>
             <div>capital {line.capital}</div>
             <div>population {line.population}</div>
-            <h3>languages</h3>
+            <h3>Spoken languages</h3>
             <ul>
               <>{line.languages.map(language => <li key={language.name}> {language.name}</li>)}</>
             </ul>
@@ -75,9 +77,44 @@ const ShowOneMatch = (props) => {
                 alt="Country flag"
               />
             </div>
+            <h3>
+              Weather in {line.capital}
+            </h3>
+            <div style={{fontWeight: "bold"}}>
+              <ShowWeather apiKey={API_KEY} cityName={line.capital} />
+            </div>
           </div>
         )
       })
+  )
+}
+
+const ShowWeather = (props) => {
+  let [responseObj, setResponseObj] = useState({});
+
+  useEffect(() => {
+    axios
+      .get(`https://api.openweathermap.org/data/2.5/weather?q=${props.cityName}&appid=${props.apiKey}`)
+      .then(response => {
+        console.log('promise fulfilled')
+        setResponseObj(response.data)
+      })
+  }, [props.cityName, props.apiKey])
+
+  return (
+    <div>
+      <div>
+        {responseObj.cod === 200 ?
+          <div>
+            <div>temperature: {Math.round(responseObj.main.temp - 273.15)} &deg; celsius</div>
+            <img src={`http://openweathermap.org/img/wn/${responseObj.weather[0].icon}@2x.png`} alt="Wheather Icon" />
+        <div>wind: {responseObj.wind.speed} m/s </div>
+        <div> humidity: {responseObj.main.humidity} %</div> 
+          </div>
+          : null
+        }
+      </div>
+    </div>
   )
 }
 
