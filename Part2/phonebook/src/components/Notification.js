@@ -6,8 +6,8 @@ const Notification = ({ message }) => {
     }
   
     return (
-      <div className="added">
-        {message}
+      <div className={message.greenBorder ? "added" : "error"}>
+        {message.message}
       </div>
     )
   }

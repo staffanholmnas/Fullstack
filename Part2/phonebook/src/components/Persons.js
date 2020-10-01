@@ -10,9 +10,11 @@ const Persons = (props) => {
     let personObjects = copyOfPersons.filter(s => s.name.toUpperCase()
       .includes(copyOfFilter.toUpperCase()))
 
+    // Add this commented out code if no numbers should be shown before filtering
+    /*
     if (copyOfFilter.length === 0) {
       return []
-    }
+    }*/
 
     return personObjects
   }
@@ -22,7 +24,7 @@ const Persons = (props) => {
       {getMatches()
         .map(line => {
           return (
-            <div key={line.name}>
+            <div key={line.id}>
               {line.name}
               {" "}
               {line.number}

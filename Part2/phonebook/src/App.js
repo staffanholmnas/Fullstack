@@ -10,7 +10,7 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [newFilter, setNewFilter] = useState('')
-  const [addedMessage, setAddedMessage] = useState(null)
+  const [newMessage, setNewMessage] = useState(null)
 
   useEffect(() => {
     phoneService
@@ -25,9 +25,20 @@ const App = () => {
       let index = persons.map(find => find.id).indexOf(id)
       phoneService
         .deleteObject(id)
+        .then()
+        .catch(error => {
+          const messageObject = {
+            message: `${name} has already been deleted from server`,
+            greenBorder: false
+          }
+          setNewMessage(messageObject)
+          setTimeout(() => {
+            setNewMessage(null)
+          }, 5000)
+        })
       const copyOfPersons = [...persons]
       copyOfPersons.splice(index, 1)
-      setPersons(copyOfPersons);
+      setPersons(copyOfPersons)
       setNewName("")
       setNewNumber("")
     }
@@ -46,13 +57,25 @@ const App = () => {
       if (window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)) {
         let getID = persons.find(item => item.name === newName)
         let id = getID.id
-          phoneService
-            .update(id, personObject)
-            .then(updatedPerson => {
-              setPersons(persons.map(person => person.id !== id ? person : updatedPerson))
-              setNewName("")
-              setNewNumber("")
-            })
+        phoneService
+          .update(id, personObject)
+          .then(updatedPerson => {
+            setPersons(persons.map(person => person.id !== id ? person : updatedPerson))
+            setNewName("")
+            setNewNumber("")
+          })
+          .catch(error => {
+            const messageObject = {
+              message: `Information of ${personObject.name} has already been removed from server`,
+              greenBorder: false
+            }
+            setNewMessage(messageObject)
+            setTimeout(() => {
+              setNewMessage(null)
+            }, 5000)
+            setNewName("")
+            setNewNumber("")
+          })
       }
     }
     else {
@@ -62,11 +85,13 @@ const App = () => {
           setPersons(persons.concat(returnedPerson))
           setNewName("")
           setNewNumber("")
-          setAddedMessage(
-            `Added ${personObject.name}`
-          )
+          const messageObject = {
+            message: `Added ${personObject.name}`,
+            greenBorder: true
+          }
+          setNewMessage(messageObject)
           setTimeout(() => {
-            setAddedMessage(null)
+            setNewMessage(null)
           }, 5000)
         })
     }
@@ -87,7 +112,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <Notification message={addedMessage} />
+      <Notification message={newMessage} />
       <Filter value={newFilter} onChange={handleFilterChange} />
       <h3>add a new</h3>
       <PersonForm
