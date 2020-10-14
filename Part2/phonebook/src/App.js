@@ -93,6 +93,16 @@ const App = () => {
           setTimeout(() => {
             setNewMessage(null)
           }, 5000)
+        }).catch(error => {
+          const message = error.response.data.error
+          const messageObject = {
+            message: message,
+            greenBorder: false
+          }
+          setNewMessage(messageObject)
+          setTimeout(() => {
+            setNewMessage(null)
+          }, 6000)
         })
     }
   }
