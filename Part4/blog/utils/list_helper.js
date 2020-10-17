@@ -10,6 +10,20 @@ const totalLikes = (blogs) => {
     )
 }
 
+const favoriteBlog = (blogs) => {
+
+    let likes = blogs.map(blog => blog.likes)
+    let obj = blogs.find(blog => blog.likes === Math.max(...likes))
+
+    if (typeof obj === 'undefined') return 0 
+
+    delete obj.__v
+    delete obj._id
+    delete obj.url
+    
+    return obj
+}
+
 module.exports = {
-    dummy, totalLikes
+    dummy, totalLikes, favoriteBlog
 }
