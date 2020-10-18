@@ -76,7 +76,7 @@ const blogsWithEqualLikes = [
     {
         _id: '5a422aa71b66a676234d1666',
         title: 'Super duper blog',
-        author: 'Pelle-Olle Z. Belafonte',
+        author: 'Pelle-olle Z. Belafonte',
         url: 'http://www.superduperblog233331.html',
         likes: 5,
         __v: 0
@@ -121,17 +121,48 @@ describe('favorite blog', () => {
         })
     })
 
-    test('is 0 when there is an empty list', () => {
+    test('is 0 when the blog list is empty', () => {
         const result = listHelper.favoriteBlog(emptyListOfBlogs)
-        expect(result).toEqual(0)
+        expect(result).toBe(0)
     })
 
-    test('is either if there is two with the most likes ', () => {
+    test('is either if there is two with the most likes', () => {
         const result = listHelper.favoriteBlog(blogsWithEqualLikes)
         expect(result).toEqual({
             title: "Go To Statement Considered Harmful",
             author: "Edsger W. Dijkstra",
             likes: 5
+        })
+    })
+})
+
+describe('Author with the most blogs', () => {
+    test('from a list of many blogs', () => {
+        const result = listHelper.mostBlogs(listWithManyBlogs)
+        expect(result).toEqual({
+            author: "Robert C. Martin",
+            blogs: 3
+        })
+    })
+
+    test('from a list of one blog', () => {
+        const result = listHelper.mostBlogs(listWithOneBlog)
+        expect(result).toEqual({
+            author: "Edsger W. Dijkstra",
+            blogs: 1
+        })
+    })
+
+    test('from an empty list returns 0', () => {
+        const result = listHelper.mostBlogs(emptyListOfBlogs)
+        expect(result).toBe(0)
+    })
+
+    test('is either if there is two with the most blogs', () => {
+        const result = listHelper.mostBlogs(blogsWithEqualLikes)
+        expect(result).toEqual({
+            author: "Edsger W. Dijkstra",
+            blogs: 1
         })
     })
 })
