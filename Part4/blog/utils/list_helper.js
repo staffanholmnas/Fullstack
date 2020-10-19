@@ -28,7 +28,7 @@ const mostBlogs = (blogs) => {
 
     let authors = blogs.map(blog => blog.author)
 
-    function mostFrequent(array) {
+    const mostFrequent = (array) => {
         if (array.length === 0)
             return null
         let modeObj = {}
@@ -44,14 +44,34 @@ const mostBlogs = (blogs) => {
                 maxCount = modeObj[el]
             }
         }
-        return [maxEl,maxCount];
+        return [maxEl, maxCount];
     }
 
     const mostBlogsArray = mostFrequent(authors)
- 
-    return mostBlogsArray === null ? 0 : {author: mostBlogsArray[0], blogs: mostBlogsArray[1]}
+
+    return mostBlogsArray === null ? 0 : { author: mostBlogsArray[0], blogs: mostBlogsArray[1] }
+}
+
+const mostLikes = (blogs) => {
+
+    if (blogs.length === 0) return 0
+
+    const getMostLikesByAuthor = (arrayOfBlogs) => {
+        return (
+            arrayOfBlogs
+                .reduce(({ total, most }, { likes, author }) => {
+                    total[author] = likes = (total[author] || 0) + likes
+                    if (likes > most.likes) most = { author, likes }
+                    return { total, most }
+                }, 
+                { total: {}, most: { likes: 0 } })
+                .most
+        )
+    }
+
+    return getMostLikesByAuthor(blogs)
 }
 
 module.exports = {
-    dummy, totalLikes, favoriteBlog, mostBlogs
+    dummy, totalLikes, favoriteBlog, mostBlogs, mostLikes
 }
