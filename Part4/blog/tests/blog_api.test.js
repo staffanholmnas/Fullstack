@@ -88,5 +88,5 @@ test('if likes property is missing, default to 0', async () => {
 })
 
 afterAll(() => {
-    mongoose.connection.close()
+    mongoose.connection.close() 
 })
