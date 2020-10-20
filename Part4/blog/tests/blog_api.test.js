@@ -52,7 +52,7 @@ test('a valid blog can be added ', async () => {
         title: 'Something bloggy blog',
         author: "I can code too",
         url: "www.weneedmorecoders.com",
-        likes: 8
+        likes: 5
     }
 
     await api
@@ -62,11 +62,29 @@ test('a valid blog can be added ', async () => {
         .expect('Content-Type', /application\/json/)
 
     const blogs = await Blog.find({})
-    
+
     expect(blogs).toHaveLength(initialBlogs.length + 1)
 
     const title = blogs.map(b => b.title)
     expect(title).toContain('Something bloggy blog')
+})
+
+test('if likes property is missing, default to 0', async () => {
+    const newBlog = {
+        title: 'This blog cannot be liked',
+        author: "Steve Jobs",
+        url: "www.stevejobscult.com",
+    }
+
+    await api
+        .post('/api/blogs')
+        .send(newBlog)
+        .expect(200)
+        .expect('Content-Type', /application\/json/)
+
+   const blogs = await Blog.find({})
+   
+   expect(blogs[initialBlogs.length].likes).toBe(0)
 })
 
 afterAll(() => {
