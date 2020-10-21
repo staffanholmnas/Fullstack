@@ -82,11 +82,26 @@ test('if likes property is missing, default to 0', async () => {
         .expect(200)
         .expect('Content-Type', /application\/json/)
 
-   const blogs = await Blog.find({})
-   
-   expect(blogs[initialBlogs.length].likes).toBe(0)
+    const blogs = await Blog.find({})
+
+    expect(blogs[initialBlogs.length].likes).toBe(0)
+})
+
+test('cannot create blog without title or url', async () => {
+    const newBlog = {
+        author: "Bill Gates"
+    }
+
+    await api
+        .post('/api/blogs')
+        .send(newBlog)
+        .expect(400)
+
+    const blogs = await Blog.find({})
+    
+    expect(blogs).toHaveLength(initialBlogs.length)
 })
 
 afterAll(() => {
-    mongoose.connection.close() 
+    mongoose.connection.close()
 })
