@@ -3,6 +3,8 @@ const supertest = require('supertest')
 const app = require('../app')
 const api = supertest(app)
 const Blog = require('../models/blog')
+const bcrypt = require('bcrypt')
+const User = require('../models/user')
 
 const initialBlogs = [
     {
@@ -134,6 +136,140 @@ describe('Updating number of likes in a blog...', () => {
         await api
             .put(`/api/blogs/${invalidId}`)
             .expect(400)
+    })
+})
+
+describe('There will always be one user in the db, check if...', () => {
+    beforeEach(async () => {
+        await User.deleteMany({})
+
+        const passwordHash = await bcrypt.hash('supersecret', 10)
+        const user = new User({ username: 'Adam', passwordHash })
+
+        await user.save()
+    })
+
+    test('it is possible to a add user with a unique username', async () => {
+        const users = await User.find({})
+        const usersAtStart = await users.map(u => u.toJSON())
+
+        const newUser = {
+            username: 'Eve',
+            name: 'Eve Andersson',
+            password: 'appleeater',
+        }
+
+        await api
+            .post('/api/users')
+            .send(newUser)
+            .expect(200)
+            .expect('Content-Type', /application\/json/)
+
+        const usersAfterAdd = await User.find({})
+        const usersAtEnd = await usersAfterAdd.map(u => u.toJSON())
+
+        expect(usersAtEnd).toHaveLength(usersAtStart.length + 1)
+
+        const usernames = usersAtEnd.map(u => u.username)
+        expect(usernames).toContain(newUser.username)
+    })
+
+    test('an error message is shown when username is taken', async () => {
+        const users = await User.find({})
+        const usersAtStart = await users.map(u => u.toJSON())
+
+        const newUser = {
+            username: 'Adam',
+            name: 'Petra Bergsjö',
+            password: 'fappword',
+        }
+
+        const result = await api
+            .post('/api/users')
+            .send(newUser)
+            .expect(400)
+            .expect('Content-Type', /application\/json/)
+
+        expect(result.body.error).toContain('`username` to be unique')
+
+        const usersAfterAdd = await User.find({})
+        const usersAtEnd = await usersAfterAdd.map(u => u.toJSON())
+
+        expect(usersAtEnd).toHaveLength(usersAtStart.length)
+    })
+
+    test('an error message is shown when no username is given', async () => {
+        const newUser = {
+            name: "Bill Gates",
+            password: "mcrosft"
+        }
+
+        const result = await api
+            .post('/api/users')
+            .send(newUser)
+            .expect(400)
+
+        expect(result.body.error).toContain('Username missing')
+
+        const users = await User.find({})
+
+        expect(users).toHaveLength(1)
+    })
+
+    test('an error message is shown when no password is given', async () => {
+        const newUser = {
+            username: "Bob the Goat",
+            name: "Bill Gates"
+        }
+
+        const result = await api
+            .post('/api/users')
+            .send(newUser)
+            .expect(400)
+
+        expect(result.body.error).toContain('Password missing')
+
+        const users = await User.find({})
+
+        expect(users).toHaveLength(1)
+    })
+
+    test('an error message is shown when username is too short', async () => {
+        const newUser = {
+            username: "bg",
+            name: "Bill Gates",
+            password: "melindaIsKind"
+        }
+
+        const result = await api
+            .post('/api/users')
+            .send(newUser)
+            .expect(400)
+
+        expect(result.body.error).toContain('Username too short')
+
+        const users = await User.find({})
+
+        expect(users).toHaveLength(1)
+    })
+
+    test('an error message is shown when password is too short', async () => {
+        const newUser = {
+            username: "big dollas",
+            name: "Bill Gates",
+            password: "bg"
+        }
+
+        const result = await api
+            .post('/api/users')
+            .send(newUser)
+            .expect(400)
+
+        expect(result.body.error).toContain('Password too short')
+
+        const users = await User.find({})
+
+        expect(users).toHaveLength(1)
     })
 })
 

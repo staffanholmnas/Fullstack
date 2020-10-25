@@ -5,6 +5,22 @@ const User = require('../models/user')
 usersRouter.post('/', async (request, response) => {
     const body = request.body
 
+    if (body.username === undefined || body.username === null ) {
+        return response.status(400).json({ error: 'Username missing' })
+    }
+
+    if (body.username.length < 3 ) {
+        return response.status(400).json({ error: 'Username too short, min length is 3 characters' })
+    }
+
+    if (body.password === undefined || body.password === null ) {
+        return response.status(400).json({ error: 'Password missing' })
+    }
+
+    if (body.password.length < 3 ) {
+        return response.status(400).json({ error: 'Password too short, min length is 3 characters' })
+    }
+
     const saltRounds = 10
     const passwordHash = await bcrypt.hash(body.password, saltRounds)
 
