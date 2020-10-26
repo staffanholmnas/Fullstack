@@ -1,10 +1,10 @@
 POST http://localhost:3003/api/blogs/
 Content-Type: application/json
-Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImhlbGxhcyIsImlkIjoiNWY5NjllOWFhZjU3OGMzMWUwNjk2NzYyIiwiaWF0IjoxNjAzNzA5NTAzfQ.TYFUS5lVosnYO5P9eGs16eRbFV53ktJq_yQofxCdC7s
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1sdXVra2FpIiwiaWQiOiI1Zjk2OWRmZGFmNTc4YzMxZTA2OTY3NjEiLCJpYXQiOjE2MDM3MTkxOTh9.CUk0Ji662Iab7ykHkJAPur_wypuVzaiql9Gq8Kr0Z5U
 
 {
-    "url": "www.tokenaddedletmepost.com",
-    "title": "Token added, let me post",
-    "author": "Darth Plagueis",
-    "likes": 512
+    "url": "www.superdupertulipblog.com",
+    "title": "Plant it super fast",
+    "author": "Daisy Sunshine",
+    "likes": 256
 }
