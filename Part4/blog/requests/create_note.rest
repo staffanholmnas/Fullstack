@@ -1,0 +1,10 @@
+POST http://localhost:3003/api/blogs/
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImhlbGxhcyIsImlkIjoiNWY5NjllOWFhZjU3OGMzMWUwNjk2NzYyIiwiaWF0IjoxNjAzNzA5NTAzfQ.TYFUS5lVosnYO5P9eGs16eRbFV53ktJq_yQofxCdC7s
+
+{
+    "url": "www.tokenaddedletmepost.com",
+    "title": "Token added, let me post",
+    "author": "Darth Plagueis",
+    "likes": 512
+}
