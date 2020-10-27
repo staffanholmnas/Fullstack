@@ -60,8 +60,28 @@ describe('Test that blogs can be added correctly:', () => {
             likes: 5
         }
 
+        const newUser = {
+            username: "big dollas",
+            name: "Bill Gates",
+            password: "biggie"
+        }
+
+        await api
+            .post('/api/users')
+            .send(newUser)
+
+        const resp = await api
+            .post('/api/login')
+            .send({
+                username: 'big dollas',
+                password: 'biggie',
+            })
+
+        const token = resp.body.token
+
         await api
             .post('/api/blogs')
+            .set('Authorization', `Bearer ${token}`)
             .send(newBlog)
             .expect(200)
             .expect('Content-Type', /application\/json/)
@@ -74,6 +94,51 @@ describe('Test that blogs can be added correctly:', () => {
         expect(title).toContain('Something bloggy blog')
     })
 
+    test('Fails with status code 401 if password is incorrect ', async () => {
+        const newBlog = {
+            title: 'Something bloggy blog',
+            author: "I can code too",
+            url: "www.weneedmorecoders.com",
+            likes: 5
+        }
+
+        const newUser = {
+            username: "big dollas",
+            name: "Bill Gates",
+            password: "biggie"
+        }
+
+        await api
+            .post('/api/users')
+            .send(newUser)
+
+        // wrong password
+        const resp = await api
+            .post('/api/login')
+            .send({
+                username: 'big dollas',
+                password: 'boogie',
+            })
+
+        const token = resp.body.token
+
+        expect(token).toBe(undefined)
+
+        await api
+            .post('/api/blogs')
+            .set('Authorization', `Bearer ${token}`)
+            .send(newBlog)
+            .expect(401)
+            .expect('Content-Type', /application\/json/)
+
+        const blogs = await Blog.find({})
+
+        expect(blogs).toHaveLength(initialBlogs.length)
+
+        const title = blogs.map(b => b.title)
+        expect(title).not.toContain('Something bloggy blog')
+    })
+
     test('If likes property is missing, default to 0', async () => {
         const newBlog = {
             title: 'This blog cannot be liked',
@@ -81,8 +146,28 @@ describe('Test that blogs can be added correctly:', () => {
             url: "www.stevejobscult.com",
         }
 
+        const newUser = {
+            username: "big dollas",
+            name: "Bill Gates",
+            password: "biggie"
+        }
+
+        await api
+            .post('/api/users')
+            .send(newUser)
+
+        const resp = await api
+            .post('/api/login')
+            .send({
+                username: 'big dollas',
+                password: 'biggie',
+            })
+
+        const token = resp.body.token
+
         await api
             .post('/api/blogs')
+            .set('Authorization', `Bearer ${token}`)
             .send(newBlog)
             .expect(200)
             .expect('Content-Type', /application\/json/)
@@ -97,8 +182,28 @@ describe('Test that blogs can be added correctly:', () => {
             author: "Bill Gates"
         }
 
+        const newUser = {
+            username: "big dollas",
+            name: "Bill Gates",
+            password: "biggie"
+        }
+
+        await api
+            .post('/api/users')
+            .send(newUser)
+
+        const resp = await api
+            .post('/api/login')
+            .send({
+                username: 'big dollas',
+                password: 'biggie',
+            })
+
+        const token = resp.body.token
+
         await api
             .post('/api/blogs')
+            .set('Authorization', `Bearer ${token}`)
             .send(newBlog)
             .expect(400)
 
@@ -106,21 +211,98 @@ describe('Test that blogs can be added correctly:', () => {
 
         expect(blogs).toHaveLength(initialBlogs.length)
     })
+
+    test('Fails with status code 401 if no token is provided ', async () => {
+        const newBlog = {
+            title: 'Something bloggy blog',
+            author: "I can code too",
+            url: "www.weneedmorecoders.com",
+            likes: 5
+        }
+
+        const newUser = {
+            username: "big dollas",
+            name: "Bill Gates",
+            password: "biggie"
+        }
+
+        await api
+            .post('/api/users')
+            .send(newUser)
+
+        const resp = await api
+            .post('/api/login')
+            .send({
+                username: 'big dollas',
+                password: 'biggie',
+            })
+
+        const token = resp.body.token
+
+        // no token provided
+        await api
+            .post('/api/blogs')
+            .send(newBlog)
+            .expect(401)
+            .expect('Content-Type', /application\/json/)
+
+        const blogs = await Blog.find({})
+
+        expect(blogs).toHaveLength(initialBlogs.length)
+
+        const title = blogs.map(b => b.title)
+        expect(title).not.toContain('Something bloggy blog')
+    })
 })
 
 describe('Deletion of a note...', () => {
     test('succeeds with status code 204 if id is valid', async () => {
+
+        const newBlog = {
+            title: 'Something bloggy blog',
+            author: "I can code too",
+            url: "www.weneedmorecoders.com",
+            likes: 5
+        }
+
+        const newUser = {
+            username: "big dollas",
+            name: "Bill Gates",
+            password: "biggie"
+        }
+
+        await api
+            .post('/api/users')
+            .send(newUser)
+
+        const resp = await api
+            .post('/api/login')
+            .send({
+                username: 'big dollas',
+                password: 'biggie',
+            })
+
+        const token = resp.body.token
+
+        await api
+            .post('/api/blogs')
+            .set('Authorization', `Bearer ${token}`)
+            .send(newBlog)
+            .expect(200)
+
         const blogs = await Blog.find({})
-        const blogToDelete = blogs[0]
+        
+        const blogToDelete = blogs[2]
 
         await api
             .delete(`/api/blogs/${blogToDelete.id}`)
+            .set('Authorization', `Bearer ${token}`)
             .expect(204)
 
         const blogsAfterDelete = await Blog.find({})
 
         expect(blogsAfterDelete).toHaveLength(
-            initialBlogs.length - 1
+            initialBlogs.length
         )
 
         const blog = blogsAfterDelete.map(b => b.title)
