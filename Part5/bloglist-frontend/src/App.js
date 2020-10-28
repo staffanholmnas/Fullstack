@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import Blog from './components/Blog'
+import Notification from './components/Notification'
 import blogService from './services/blogs'
-import loginService from './services/login' 
+import loginService from './services/login'
+ 
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -11,6 +13,7 @@ const App = () => {
   const [username, setUsername] = useState('') 
   const [password, setPassword] = useState('') 
   const [user, setUser] = useState(null)
+  const [newMessage, setNewMessage] = useState(null)
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -23,7 +26,7 @@ const App = () => {
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
       setUser(user)
-     // blogService.setToken(user.token)
+      blogService.setToken(user.token)
     }
   }, [])
 
@@ -42,6 +45,14 @@ const App = () => {
         setNewTitle('')
         setNewAuthor('')
         setNewUrl('')
+        const message = {
+          message: `a new blog '${newTitle}' by ${newAuthor} added`,
+          error: false
+        }
+        setNewMessage(message)
+        setTimeout(() => {
+          setNewMessage(null)
+          }, 5000)
       })
   }
 
@@ -61,9 +72,13 @@ const App = () => {
       setUsername('')
       setPassword('')
     } catch (exception) {
-     // setErrorMessage('Wrong credentials')
+      const message = {
+        message: `wrong username or password`,
+        error: true
+      }
+      setNewMessage(message)
       setTimeout(() => {
-       // setErrorMessage(null)
+        setNewMessage(null)
       }, 5000)
     }
   }
@@ -72,6 +87,7 @@ const App = () => {
     return (
       <div>
         <h2>Log in to application</h2>
+        <Notification message={newMessage} />
         <form onSubmit={handleLogin}>
         <div>
           username
@@ -100,6 +116,7 @@ const App = () => {
   return (
     <div>
       <h2>blogs</h2>
+      <Notification message={newMessage} />
       <p>{user.name} logged-in 
       <button onClick={() => {
         window.localStorage.removeItem('loggedNoteappUser')
