@@ -1,28 +1,33 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import Blog from './components/Blog'
+import BlogForm from './components/BlogForm'
+import Toggleable from './components/Toggleable'
+import LoginForm from './components/LoginForm'
 import Notification from './components/Notification'
 import blogService from './services/blogs'
 import loginService from './services/login'
- 
+
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [newTitle, setNewTitle] = useState('')
   const [newAuthor, setNewAuthor] = useState('')
   const [newUrl, setNewUrl] = useState('')
-  const [username, setUsername] = useState('') 
-  const [password, setPassword] = useState('') 
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
   const [newMessage, setNewMessage] = useState(null)
 
+  const blogFormRef = useRef()
+
   useEffect(() => {
     blogService.getAll().then(blogs =>
-      setBlogs( blogs )
-    )  
+      setBlogs(blogs)
+    )
   }, [])
 
   useEffect(() => {
-    const loggedUserJSON = window.localStorage.getItem('loggedNoteappUser')
+    const loggedUserJSON = window.localStorage.getItem('loggedBlogAppUser')
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
       setUser(user)
@@ -38,6 +43,7 @@ const App = () => {
       url: newUrl
     }
 
+    blogFormRef.current.toggleVisibility()
     blogService
       .create(blogObject)
       .then(returnedNote => {
@@ -52,20 +58,20 @@ const App = () => {
         setNewMessage(message)
         setTimeout(() => {
           setNewMessage(null)
-          }, 5000)
+        }, 5000)
       })
   }
 
   const handleLogin = async (event) => {
     event.preventDefault()
-    
+
     try {
       const user = await loginService.login({
         username, password,
       })
 
       window.localStorage.setItem(
-        'loggedNoteappUser', JSON.stringify(user)
+        'loggedBlogAppUser', JSON.stringify(user)
       )
       blogService.setToken(user.token)
       setUser(user)
@@ -86,29 +92,14 @@ const App = () => {
   if (user === null) {
     return (
       <div>
-        <h2>Log in to application</h2>
         <Notification message={newMessage} />
-        <form onSubmit={handleLogin}>
-        <div>
-          username
-            <input
-            type="text"
-            value={username}
-            name="Username"
-            onChange={({ target }) => setUsername(target.value)}
+          <LoginForm
+            username={username}
+            password={password}
+            handleUsernameChange={({ target }) => setUsername(target.value)}
+            handlePasswordChange={({ target }) => setPassword(target.value)}
+            handleSubmit={handleLogin}
           />
-        </div>
-        <div>
-          password
-            <input
-            type="password"
-            value={password}
-            name="Password"
-            onChange={({ target }) => setPassword(target.value)}
-          />
-        </div>
-        <button type="submit">login</button>
-        </form>
       </div>
     )
   }
@@ -116,45 +107,30 @@ const App = () => {
   return (
     <div>
       <h2>blogs</h2>
+
       <Notification message={newMessage} />
-      <p>{user.name} logged-in 
+
+      <p>{user.name} logged-in
+
       <button onClick={() => {
-        window.localStorage.removeItem('loggedNoteappUser')
-        setUser(null)
-    }}>logout</button></p>
-    <div>
-      <h2>create new</h2>
-      <form onSubmit={addBlog}>
-        <div>
-          title:
-            <input
-            type="text"
-            value={newTitle}
-            name="title"
-            onChange={({ target }) => setNewTitle(target.value)}
+          window.localStorage.removeItem('loggedBlogAppUser')
+          setUser(null)
+        }}>logout</button></p>
+
+      <div>
+
+        <Toggleable buttonLabel="new blog" ref={blogFormRef}>
+          <BlogForm
+            onSubmit={addBlog}
+            titleValue={newTitle}
+            authorValue={newAuthor}
+            urlValue={newUrl}
+            handleTitleChange={({ target }) => setNewTitle(target.value)}
+            handleAuthorChange={({ target }) => setNewAuthor(target.value)}
+            handleUrlChange={({ target }) => setNewUrl(target.value)}
           />
-        </div>
-        <div>
-          author:
-            <input
-            type="text"
-            value={newAuthor}
-            name="author"
-            onChange={({ target }) => setNewAuthor(target.value)}
-          />
-        </div>
-        <div>
-          url:
-            <input
-            type="text"
-            value={newUrl}
-            name="url"
-            onChange={({ target }) => setNewUrl(target.value)}
-          />
-        </div>
-        <button type="submit">create</button>
-        </form>
-      
+        </Toggleable>
+
       </div>
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} />
