@@ -1,36 +1,53 @@
-import React from 'react'
+import React, { useState } from 'react'
 
-const BlogForm = (props) => {
+const BlogForm = ({ createBlog }) => {
+    const [newTitle, setNewTitle] = useState('')
+    const [newAuthor, setNewAuthor] = useState('')
+    const [newUrl, setNewUrl] = useState('')
+
+    const addBlog = (event) => {
+        event.preventDefault()
+        createBlog({
+            title: newTitle,
+            author: newAuthor,
+            url: newUrl,
+        })
+
+        setNewTitle('')
+        setNewAuthor('')
+        setNewUrl('')
+    }
+
     return (
         <div>
             <h2>Create new</h2>
 
-            <form onSubmit={props.onSubmit}>
+            <form onSubmit={addBlog}>
                 <div>
                     title:
             <input
                         type="text"
-                        value={props.titleValue}
+                        value={newTitle}
                         name="title"
-                        onChange={props.handleTitleChange}
+                        onChange={({ target }) => setNewTitle(target.value)}
                     />
                 </div>
                 <div>
                     author:
             <input
                         type="text"
-                        value={props.authorValue}
+                        value={newAuthor}
                         name="author"
-                        onChange={props.handleAuthorChange}
+                        onChange={({ target }) => setNewAuthor(target.value)}
                     />
                 </div>
                 <div>
                     url:
             <input
                         type="text"
-                        value={props.urlValue}
+                        value={newUrl}
                         name="url"
-                        onChange={props.handleUrlChange}
+                        onChange={({ target }) => setNewUrl(target.value)}
                     />
                 </div>
                 <button type="submit">create</button>
