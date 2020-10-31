@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-const Blog = ({ blog }) => {
+const Blog = ({ blog, updateBlog }) => {
   const [viewAll, setViewAll] = useState(false)
 
   const hideViewAll = { display: viewAll ? 'none' : '' }
@@ -14,6 +14,18 @@ const Blog = ({ blog }) => {
     marginBottom: 5
   }
 
+  const handleClick = () => {
+    const blogObj = {
+      user: blog.user.id,
+      likes: blog.likes + 1,
+      author: blog.author,
+      title: blog.title,
+      url: blog.url
+    }
+    const id = blog.id
+    updateBlog(id, blogObj)
+  }
+
   return (
     <div style={blogStyle}>
       <div style={hideViewAll}>
@@ -22,7 +34,7 @@ const Blog = ({ blog }) => {
       <div style={showViewAll}>
         {blog.title} - {blog.author} <button onClick={() => setViewAll(false)}>hide</button>
         <div>{blog.url}</div>
-        <div>likes {blog.likes} <button onClick={() => console.log("This button does nothing yet!")}>like</button></div>
+        <div>likes {blog.likes} <button onClick={() => {handleClick()}}>like</button></div>
         <div>{blog.user.name}</div>
       </div>
     </div>

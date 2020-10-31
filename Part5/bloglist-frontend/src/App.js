@@ -49,6 +49,17 @@ const App = () => {
       })
   }
 
+  const updateBlog = (id, blogObj) => {
+    blogService
+      .update(id, blogObj)
+      .then(returnedBlog => {
+        setBlogs(blogs.map(blog => blog.id !== id ? blog : returnedBlog))
+      })
+      .catch(error => {
+        console.log("Something went wrong! ", error)
+      })
+  }
+
   const handleLogin = async (event) => {
     event.preventDefault()
 
@@ -112,7 +123,7 @@ const App = () => {
 
       </div>
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
+        <Blog key={blog.id} blog={blog} updateBlog={updateBlog} />
       )}
     </div>
   )
