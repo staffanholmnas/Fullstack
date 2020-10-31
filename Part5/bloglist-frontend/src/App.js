@@ -50,14 +50,17 @@ const App = () => {
   }
 
   const updateBlog = (id, blogObj) => {
+    const blogToUpdate = blogs.find(blog => blog.id === id)
+
     blogService
       .update(id, blogObj)
       .then(returnedBlog => {
+        returnedBlog.user = blogToUpdate.user
         setBlogs(blogs.map(blog => blog.id !== id ? blog : returnedBlog))
       })
       .catch(error => {
-        console.log("Something went wrong! ", error)
-      })
+        console.log("Something went wrong! Blog cannot be found in database.", error)
+      })  
   }
 
   const handleLogin = async (event) => {

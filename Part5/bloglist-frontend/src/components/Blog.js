@@ -16,14 +16,14 @@ const Blog = ({ blog, updateBlog }) => {
 
   const handleClick = () => {
     const blogObj = {
-      user: blog.user.id,
-      likes: blog.likes + 1,
-      author: blog.author,
       title: blog.title,
-      url: blog.url
+      id: blog.id,
+      author: blog.author,
+      url: blog.url,
+      likes: blog.likes + 1,
+      user: blog.user.id,
     }
-    const id = blog.id
-    updateBlog(id, blogObj)
+    updateBlog(blogObj.id, blogObj)
   }
 
   return (
