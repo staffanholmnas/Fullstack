@@ -60,7 +60,28 @@ const App = () => {
       })
       .catch(error => {
         console.log("Something went wrong! Blog cannot be found in database.", error)
-      })  
+      })
+  }
+
+  const deleteBlog = (id, title, author) => {
+    if (window.confirm(`Remove blog ${title} by ${author} ?`)) {
+      let index = blogs.map(blog => blog.id).indexOf(id)
+      blogService
+        .deleteObject(id)
+        .catch(error => {
+          const messageObject = {
+            message: `${title} has already been deleted from server`,
+            error: true
+          }
+          setNewMessage(messageObject)
+          setTimeout(() => {
+            setNewMessage(null)
+          }, 5000)
+        })
+      const copyOfBlogs = [...blogs]
+      copyOfBlogs.splice(index, 1)
+      setBlogs(copyOfBlogs)
+    }
   }
 
   const handleLogin = async (event) => {
@@ -90,7 +111,7 @@ const App = () => {
     }
   }
 
-  const sortedBlogs = (blogs) =>{
+  const sortedBlogs = (blogs) => {
     return blogs.sort((a, b) => b.likes - a.likes)
   }
 
@@ -130,7 +151,7 @@ const App = () => {
 
       </div>
       {sortedBlogs(blogs).map(blog =>
-        <Blog key={blog.id} blog={blog} updateBlog={updateBlog} />
+        <Blog key={blog.id} blog={blog} updateBlog={updateBlog} user={user} deleteBlog={deleteBlog} />
       )}
     </div>
   )

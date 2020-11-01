@@ -1,7 +1,12 @@
 import React, { useState } from 'react'
 
-const Blog = ({ blog, updateBlog }) => {
+const Blog = ({ blog, updateBlog, user, deleteBlog }) => {
   const [viewAll, setViewAll] = useState(false)
+
+  let showRemove = { display: 'none'}
+  if (user.name === blog.user.name) {
+    showRemove = { display: ''}
+  }
 
   const hideViewAll = { display: viewAll ? 'none' : '' }
   const showViewAll = { display: viewAll ? '' : 'none' }
@@ -14,7 +19,7 @@ const Blog = ({ blog, updateBlog }) => {
     marginBottom: 5
   }
 
-  const handleClick = () => {
+  const handleLikeClick = () => {
     const blogObj = {
       title: blog.title,
       id: blog.id,
@@ -26,6 +31,10 @@ const Blog = ({ blog, updateBlog }) => {
     updateBlog(blogObj.id, blogObj)
   }
 
+  const handleRemoveClick = () => {
+    deleteBlog(blog.id, blog.title, blog.author)
+  }
+
   return (
     <div style={blogStyle}>
       <div style={hideViewAll}>
@@ -34,8 +43,9 @@ const Blog = ({ blog, updateBlog }) => {
       <div style={showViewAll}>
         {blog.title} - {blog.author} <button onClick={() => setViewAll(false)}>hide</button>
         <div>{blog.url}</div>
-        <div>likes {blog.likes} <button onClick={() => {handleClick()}}>like</button></div>
+        <div>likes {blog.likes} <button onClick={() => {handleLikeClick()}}>like</button></div>
         <div>{blog.user.name}</div>
+        <div style = {showRemove}><button style = {{backgroundColor: 'lightblue'}} onClick={() => {handleRemoveClick()}}>remove</button></div>
       </div>
     </div>
   )
