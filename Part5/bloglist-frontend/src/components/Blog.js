@@ -3,9 +3,9 @@ import React, { useState } from 'react'
 const Blog = ({ blog, updateBlog, user, deleteBlog }) => {
   const [viewAll, setViewAll] = useState(false)
 
-  let showRemove = { display: 'none'}
+  let showRemove = { display: 'none' }
   if (user.name === blog.user.name) {
-    showRemove = { display: ''}
+    showRemove = { display: '' }
   }
 
   const hideViewAll = { display: viewAll ? 'none' : '' }
@@ -45,7 +45,7 @@ const Blog = ({ blog, updateBlog, user, deleteBlog }) => {
         <div>{blog.url}</div>
         <div>likes {blog.likes} <button onClick={() => {handleLikeClick()}}>like</button></div>
         <div>{blog.user.name}</div>
-        <div style = {showRemove}><button style = {{backgroundColor: 'lightblue'}} onClick={() => {handleRemoveClick()}}>remove</button></div>
+        <div style = {showRemove}><button style = {{ backgroundColor: 'lightblue' }} onClick={() => {handleRemoveClick()}}>remove</button></div>
       </div>
     </div>
   )

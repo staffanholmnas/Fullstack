@@ -46,6 +46,16 @@ const App = () => {
         setTimeout(() => {
           setNewMessage(null)
         }, 5000)
+      }).catch(error => {
+        console.log(error.response.data.error)
+        const message = {
+          message: `${error.response.data.error}`,
+          error: true
+        }
+        setNewMessage(message)
+        setTimeout(() => {
+          setNewMessage(null)
+        }, 5000)
       })
   }
 
@@ -59,7 +69,7 @@ const App = () => {
         setBlogs(blogs.map(blog => blog.id !== id ? blog : returnedBlog))
       })
       .catch(error => {
-        console.log("Something went wrong! Blog cannot be found in database.", error)
+        console.log('Something went wrong! Blog cannot be found in database.', error)
       })
   }
 
@@ -68,7 +78,7 @@ const App = () => {
       let index = blogs.map(blog => blog.id).indexOf(id)
       blogService
         .deleteObject(id)
-        .catch(error => {
+        .catch(() => {
           const messageObject = {
             message: `${title} has already been deleted from server`,
             error: true
@@ -101,7 +111,7 @@ const App = () => {
       setPassword('')
     } catch (exception) {
       const message = {
-        message: `wrong username or password`,
+        message: 'wrong username or password',
         error: true
       }
       setNewMessage(message)
@@ -138,7 +148,7 @@ const App = () => {
 
       <p>{user.name} logged-in
 
-      <button onClick={() => {
+        <button onClick={() => {
           window.localStorage.removeItem('loggedBlogAppUser')
           setUser(null)
         }}>logout</button></p>
