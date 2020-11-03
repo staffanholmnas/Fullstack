@@ -37,7 +37,7 @@ const Blog = ({ blog, updateBlog, user, deleteBlog }) => {
 
   return (
     <div style={blogStyle}>
-      <div style={hideViewAll}>
+      <div style={hideViewAll} className='blog'>
         {blog.title} - {blog.author} <button onClick={() => setViewAll(true)}>view</button>
       </div>
       <div style={showViewAll}>
