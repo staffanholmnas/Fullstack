@@ -69,3 +69,31 @@ test('clicking the view button shows element containing url and likes', () => {
   expect(div2).toHaveTextContent(blog.likes)
 
 })
+
+test('clicking the like button twice calls the event handler twice', () => {
+  const user = {
+    username: "Steve Green",
+    password: "SG"
+  }
+
+  const blog = {
+    title: 'Component testing is done with react-testing-library',
+    author: "Martin Fowler",
+    url: "www.partingflower.com",
+    likes: 4,
+    user: user
+  }
+
+  const mockHandler = jest.fn()
+
+  const component = render(
+    <Blog blog={blog} user={user} updateBlog={mockHandler}/>
+  )
+
+  const button = component.getByText('like')
+  fireEvent.click(button)
+  fireEvent.click(button)
+
+  expect(mockHandler.mock.calls).toHaveLength(2)
+  
+})
