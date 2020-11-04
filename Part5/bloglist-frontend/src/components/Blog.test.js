@@ -34,7 +34,7 @@ test('renders title and author, not url and likes', () => {
 })
 
 
-test('clicking the view button shows component containing url and likes', () => {
+test('clicking the view button shows element containing url and likes', () => {
   const user = {
     username: "Steve Green",
     password: "SG"
