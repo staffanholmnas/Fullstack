@@ -34,7 +34,7 @@ describe('Blog app', function () {
     })
   })
 
-  describe('When logged in', function() {
+  describe.only('When logged in', function() {
     beforeEach(function() {
       cy.get('#username').type('mluukkai')
       cy.get('#password').type('salainen')
@@ -61,6 +61,21 @@ describe('Blog app', function () {
       cy.contains('second blog created')
       cy.contains('www.mattilcypressblogs.com')
       cy.get('.added').contains("a new blog 'second blog created' by Matti L. added")
+    })
+
+    it('A blog can be liked', function() {
+      cy.contains('create new blog').click()
+      cy.get('#title').type('a blog created by cypress')
+      cy.get('#author').type('Matti L.')
+      cy.get('#url').type('www.mattilcypressblogs.com')
+      cy.get('#create-button').click()
+      cy.contains('view').click()
+
+      cy.get('#like-button').click()
+      cy.get('#likes').contains(1)
+
+      cy.get('#like-button').click()
+      cy.get('#likes').contains(2)
     })
   })
 })
