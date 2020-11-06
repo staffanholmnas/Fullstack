@@ -34,7 +34,7 @@ describe('Blog app', function () {
     })
   })
 
-  describe.only('When logged in', function() {
+  describe('When logged in', function() {
     beforeEach(function() {
       cy.get('#username').type('mluukkai')
       cy.get('#password').type('salainen')
@@ -76,6 +76,20 @@ describe('Blog app', function () {
 
       cy.get('#like-button').click()
       cy.get('#likes').contains(2)
+    })
+
+    it('A blog can be removed', function() {
+      cy.contains('create new blog').click()
+      cy.get('#title').type('a blog created by cypress')
+      cy.get('#author').type('Matti L.')
+      cy.get('#url').type('www.mattilcypressblogs.com')
+      cy.get('#create-button').click()
+      cy.contains('view').click()
+
+      cy.contains('a blog created by cypress')
+      cy.get('#remove-button').click()
+      cy.get('html').should('not.have.value', 'a blog created by cypress')
+      
     })
   })
 })

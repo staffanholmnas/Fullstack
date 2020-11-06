@@ -45,7 +45,7 @@ const Blog = ({ blog, updateBlog, user, deleteBlog }) => {
         <div>{blog.url}</div>
         <div id='likes'>likes {blog.likes} <button id='like-button' onClick={() => {handleLikeClick()}}>like</button></div>
         <div>{blog.user.name}</div>
-        <div style = {showRemove}><button style = {{ backgroundColor: 'lightblue' }} onClick={() => {handleRemoveClick()}}>remove</button></div>
+        <div style = {showRemove}><button id='remove-button' style = {{ backgroundColor: 'lightblue' }} onClick={() => {handleRemoveClick()}}>remove</button></div>
       </div>
     </div>
   )
