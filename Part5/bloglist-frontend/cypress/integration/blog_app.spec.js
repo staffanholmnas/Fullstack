@@ -33,4 +33,34 @@ describe('Blog app', function () {
       cy.get('.error').should('have.css', 'color', 'rgb(255, 0, 0)')
     })
   })
+
+  describe('When logged in', function() {
+    beforeEach(function() {
+      cy.get('#username').type('mluukkai')
+      cy.get('#password').type('salainen')
+      cy.get('#login-button').click()
+    })
+
+    it('A blog can be created', function() {
+      cy.contains('create new blog').click()
+      cy.get('#title').type('a blog created by cypress')
+      cy.get('#author').type('Matti L.')
+      cy.get('#url').type('www.mattilcypressblogs.com')
+      cy.get('#create-button').click()
+
+      cy.contains('a blog created by cypress')
+      cy.contains('www.mattilcypressblogs.com')
+      cy.get('.added').contains("a new blog 'a blog created by cypress' by Matti L. added")
+      
+      cy.contains('create new blog').click()
+      cy.get('#title').type('second blog created')
+      cy.get('#author').type('Matti L.')
+      cy.get('#url').type('www.mattilcypressblogs.com')
+      cy.get('#create-button').click()
+
+      cy.contains('second blog created')
+      cy.contains('www.mattilcypressblogs.com')
+      cy.get('.added').contains("a new blog 'second blog created' by Matti L. added")
+    })
+  })
 })
