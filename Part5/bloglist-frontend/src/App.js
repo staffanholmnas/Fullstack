@@ -45,7 +45,7 @@ const App = () => {
         setNewMessage(message)
         setTimeout(() => {
           setNewMessage(null)
-        }, 5000)
+        }, 2000)
       }).catch(error => {
         console.log(error.response.data.error)
         const message = {
@@ -55,7 +55,7 @@ const App = () => {
         setNewMessage(message)
         setTimeout(() => {
           setNewMessage(null)
-        }, 5000)
+        }, 4000)
       })
   }
 
@@ -86,7 +86,7 @@ const App = () => {
           setNewMessage(messageObject)
           setTimeout(() => {
             setNewMessage(null)
-          }, 5000)
+          }, 4000)
         })
       const copyOfBlogs = [...blogs]
       copyOfBlogs.splice(index, 1)

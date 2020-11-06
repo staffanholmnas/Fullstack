@@ -89,7 +89,76 @@ describe('Blog app', function () {
       cy.contains('a blog created by cypress')
       cy.get('#remove-button').click()
       cy.get('html').should('not.have.value', 'a blog created by cypress')
+    })
+
+    it('Blogs are in order of likes', function() {
+      cy.contains('create new blog').click()
+      cy.get('#title').type('First blog created by cypress')
+      cy.get('#author').type('Matti L.')
+      cy.get('#url').type('www.mattilcypressblogs.com')
+      cy.get('#create-button').click()
+
+      cy.contains('create new blog').click()
+      cy.get('#title').type('Second blog')
+      cy.get('#author').type('Matti K.')
+      cy.get('#url').type('www.kmattisblogs.com')
+      cy.get('#create-button').click()
+     
+      // Couldn't get timeout to work so instead many likes
+      // are clicked until banner disappears
+      cy.contains('view').click()
+      cy.get('#like-button').click()
+      cy.get('#like-button').click()
+      cy.get('#like-button').click()
+      cy.get('#like-button').click()
+      cy.get('#like-button').click()
+      cy.get('#like-button').click()
+      cy.get('#like-button').click()
+      cy.get('#like-button').click()
+      cy.get('#like-button').click()
+      cy.get('#like-button').click()
+      cy.get('#like-button').click()
+      cy.get('#like-button').click()
+      cy.get('#like-button').click()
+      cy.get('#like-button').click()
+      cy.get('#like-button').click()
+      cy.get('#like-button').click()
+      // First blog has 16 likes
+      cy.get('#likes').contains(16)
+
+      cy.get('#hide-button').click()
+
+      cy.contains('Second blog').parent().find('#view-button').as('theButton')
+      cy.get('@theButton').click()
+
+      cy.contains('Second blog').parent().find('#like-button').as('theButton')
+      cy.get('@theButton').click()
+    
+      cy.get('@theButton').click()
+      cy.get('@theButton').click()
+      cy.get('@theButton').click()
+      cy.get('@theButton').click()
+      cy.get('@theButton').click()
+      cy.get('@theButton').click()
+      cy.get('@theButton').click()
+      cy.get('@theButton').click()
+      cy.get('@theButton').click()
+      cy.get('@theButton').click()
+      cy.get('@theButton').click()
+      cy.get('@theButton').click()
+      cy.get('@theButton').click()
+      cy.get('@theButton').click()
+      cy.get('@theButton').click()
+      cy.get('@theButton').click()
+      cy.get('@theButton').click()
+      cy.get('@theButton').click()
+      cy.get('@theButton').click()
       
+      // Second blog will be first on the list, it has more likes now
+      cy.get('#likes').contains(20)
+
+      cy.contains('First blog created by cypress').parent().find('#view-button').as('theButton')
+      cy.get('@theButton').click()
     })
   })
 })

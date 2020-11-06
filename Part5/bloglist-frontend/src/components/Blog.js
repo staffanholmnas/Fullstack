@@ -38,10 +38,10 @@ const Blog = ({ blog, updateBlog, user, deleteBlog }) => {
   return (
     <div style={blogStyle} className='blog'>
       <div style={hideViewAll} className='hidden'>
-        {blog.title} - {blog.author} <button onClick={() => setViewAll(true)}>view</button>
+        {blog.title} - {blog.author} <button id='view-button' onClick={() => setViewAll(true)}>view</button>
       </div>
       <div style={showViewAll} className='visible'>
-        {blog.title} - {blog.author} <button onClick={() => setViewAll(false)}>hide</button>
+        {blog.title} - {blog.author} <button id='hide-button' onClick={() => setViewAll(false)}>hide</button>
         <div>{blog.url}</div>
         <div id='likes'>likes {blog.likes} <button id='like-button' onClick={() => {handleLikeClick()}}>like</button></div>
         <div>{blog.user.name}</div>
