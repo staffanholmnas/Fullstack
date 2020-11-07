@@ -78,7 +78,7 @@ const App = () => {
       let index = blogs.map(blog => blog.id).indexOf(id)
       blogService
         .deleteObject(id)
-        .catch(() => {
+        .catch((error) => {
           const messageObject = {
             message: `${title} has already been deleted from server`,
             error: true
