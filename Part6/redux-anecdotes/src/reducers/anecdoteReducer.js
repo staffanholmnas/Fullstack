@@ -34,6 +34,10 @@ const reducer = (state = initialState, action) => {
         anecdote.id !== id ? anecdote : changedAnecdote
       )
     }
+    case 'NEW_ANECDOTE': {
+      const content = action.data.content
+      return [...state, asObject(content)]
+    }
     default:
       return state
   }
