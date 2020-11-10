@@ -1,18 +1,30 @@
-const notificationReducer = (state = 'Initial message', action) => {
+const initialState = ''
+
+const notificationReducer = (state = initialState, action) => {
     switch (action.type) {
-      case 'SET_NOTIFICATION':
-        return action.notification
-      default:
-        return state
+        case 'SHOW_NOTIFICATION':
+            let stateClone = { ...state }
+            stateClone = action.notification
+            return stateClone
+        case 'HIDE_NOTIFICATION':
+            return initialState
+        default:
+            return state
     }
-  }
-  // not needed yet
-  export const notificationChange = notification => {
+}
+
+export const showNotification = notification => {
     return {
-      type: 'SET_NOTIFICATION',
-      notification,
+        type: 'SHOW_NOTIFICATION',
+        notification,
     }
-  }
-  
-  export default notificationReducer
-   
+}
+
+export const hideNotification = (notification) => {
+    return {
+        type: 'HIDE_NOTIFICATION',
+        notification
+    }
+}
+
+export default notificationReducer
