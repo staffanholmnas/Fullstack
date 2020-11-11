@@ -41,9 +41,19 @@
       "id": "ZUs5AEY"
     },
     {
-      "content": "Add new anecdote that breaks the code",
+      "content": "The best way to handle states in Redux",
       "votes": 0,
-      "id": "EXoS_ii"
+      "id": "TC4wYQN"
+    },
+    {
+      "content": "Everything seems to work as intended so far!",
+      "votes": 0,
+      "id": "_gyj0ON"
+    },
+    {
+      "content": "Super anecdote is superduper",
+      "votes": 0,
+      "id": "EVs9-DU"
     }
   ]
 }

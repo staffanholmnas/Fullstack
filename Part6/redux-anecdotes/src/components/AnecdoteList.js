@@ -1,14 +1,14 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { giveVote } from '../reducers/anecdoteReducer'
-import { showNotification } from '../reducers/notificationReducer'
+import { showNotification, hideNotification } from '../reducers/notificationReducer'
 
 const AnecdoteList = () => {
   const anecdotes = useSelector(state => state.anecdotes)
   const filter = useSelector(state => state.filter)
   const dispatch = useDispatch()
 
-  const hide = () => dispatch(showNotification(''))
+  const hide = () => dispatch(hideNotification())
   const vote = (id, content) => {
     dispatch(giveVote(id))
     dispatch(showNotification(`you voted '${content}'`))
@@ -23,7 +23,6 @@ const AnecdoteList = () => {
 
     let copyOfAnecdotes = [...anecdotes]
     let copyOfFilter = filter
-    console.log("copy of anecdotes for filtering", copyOfAnecdotes)
     let filteredAnecdotes = copyOfAnecdotes.filter(a => a.content.toUpperCase()
       .includes(copyOfFilter.toUpperCase()))
 
