@@ -23,7 +23,7 @@ const AnecdoteList = () => {
 
     let copyOfAnecdotes = [...anecdotes]
     let copyOfFilter = filter
-
+    console.log("copy of anecdotes for filtering", copyOfAnecdotes)
     let filteredAnecdotes = copyOfAnecdotes.filter(a => a.content.toUpperCase()
       .includes(copyOfFilter.toUpperCase()))
 
