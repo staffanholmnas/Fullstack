@@ -3,20 +3,26 @@ const initialState = ''
 const notificationReducer = (state = initialState, action) => {
   switch (action.type) {
     case 'SHOW_NOTIFICATION':
-      let stateClone = { ...state }
-      stateClone = action.notification
-      return stateClone
-      case 'HIDE_NOTIFICATION':
-        return initialState
+      return action.data
+    case 'HIDE_NOTIFICATION':
+      return initialState
     default:
       return state
   }
 }
 
-export const showNotification = notification => {
-  return {
-    type: 'SHOW_NOTIFICATION',
-    notification,
+let timeoutID
+
+export const showNotification = (notification, time) => {
+  return async dispatch => {
+    clearTimeout(timeoutID)
+    await dispatch({
+      type: 'SHOW_NOTIFICATION',
+      data: notification,
+    })
+    timeoutID = setTimeout(() => {
+      dispatch(hideNotification())
+    }, time * 1000)
   }
 }
 
