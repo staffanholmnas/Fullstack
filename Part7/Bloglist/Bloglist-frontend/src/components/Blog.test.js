@@ -3,97 +3,78 @@ import '@testing-library/jest-dom/extend-expect'
 import { render, fireEvent } from '@testing-library/react'
 import Blog from './Blog'
 
-test('renders title and author, not url and likes', () => {
-  const user = {
-    username: "Steve Green",
-    password: "SG"
-  }
+const other = {
+  own: true,
+  handleRemove: () => {},
+  handleLike: () => {}
+}
 
-  const blog = {
-    title: 'Component testing is done with react-testing-library',
-    author: "Martin Fowler",
-    url: "www.partingflower.com",
-    likes: 4,
-    user: user
-  }
+describe('Blog', () => {
+  test('renders only author and title by default', () => {
+    const blog = {
+      author: 'Ron Jeffries',
+      title: 'You’re NOT gonna need it!',
+      url: 'https://ronjeffries.com/xprog/articles/practices/pracnotneed/',
+      likes: 3,
+    }
 
-  const component = render(
-    <Blog blog={blog} user={user} />
-  )
+    const component = render(
+      <Blog blog={blog} {...other} />
+    )
 
-  const div = component.container.querySelector('.hidden')
+    expect(component.container).toHaveTextContent(blog.author)
+    expect(component.container).toHaveTextContent(blog.title)
+    expect(component.container).not.toHaveTextContent(blog.url)
+  })
 
-  expect(div).toHaveTextContent(blog.title)
+  test('renders url and likes when expanded', () => {
+    const blog = {
+      author: 'Ron Jeffries',
+      title: 'You’re NOT gonna need it!',
+      url: 'https://ronjeffries.com/xprog/articles/practices/pracnotneed/',
+      likes: 3,
+      user: {
+        name: 'Arto Hellas'
+      }
+    }
 
-  expect(div).toHaveTextContent(blog.author)
+    const component = render(
+      <Blog blog={blog} {...other} />
+    )
 
-  expect(div).not.toHaveTextContent(blog.url)
+    const viewButton = component.getByText('view')
+    fireEvent.click(viewButton)
 
-  expect(div).not.toHaveTextContent(blog.likes)
+    expect(component.container).toHaveTextContent(blog.url)
+    expect(component.container).toHaveTextContent(`likes ${blog.likes}`)
+  })
 
-})
+  test('when liked twice, the event handler gets called twice', () => {
+    const blog = {
+      author: 'Ron Jeffries',
+      title: 'You’re NOT gonna need it!',
+      url: 'https://ronjeffries.com/xprog/articles/practices/pracnotneed/',
+      likes: 3,
+      id: 1,
+      user: {
+        name: 'Arto Hellas'
+      }
+    }
 
+    other.handleLike = jest.fn()
 
-test('clicking the view button shows element containing url and likes', () => {
-  const user = {
-    username: "Steve Green",
-    password: "SG"
-  }
+    const component = render(
+      <Blog blog={blog} {...other} />
+    )
 
-  const blog = {
-    title: 'Component testing is done with react-testing-library',
-    author: "Martin Fowler",
-    url: "www.partingflower.com",
-    likes: 4,
-    user: user
-  }
+    const viewButton = component.getByText('view')
+    fireEvent.click(viewButton)
 
-  const component = render(
-    <Blog blog={blog} user={user} />
-  )
+    const likeButton = component.getByText('like')
+    fireEvent.click(likeButton)
+    fireEvent.click(likeButton)
 
-  let div = component.container.querySelector('.hidden')
-  let div2 = component.container.querySelector('.visible')
-  
-  expect(div).not.toHaveStyle('display: none')
-  expect(div2).toHaveStyle('display: none')
-  expect(div).not.toHaveTextContent(blog.url)
-  expect(div).not.toHaveTextContent(blog.likes)
+    expect(other.handleLike.mock.calls.length).toBe(2)
+  })
 
-  const button = component.getByText('view')
-  fireEvent.click(button)
-  
-  expect(div).toHaveStyle('display: none')
-  expect(div2).not.toHaveStyle('display: none')
-  expect(div2).toHaveTextContent(blog.url)
-  expect(div2).toHaveTextContent(blog.likes)
-
-})
-
-test('clicking the like button twice calls the event handler twice', () => {
-  const user = {
-    username: "Steve Green",
-    password: "SG"
-  }
-
-  const blog = {
-    title: 'Component testing is done with react-testing-library',
-    author: "Martin Fowler",
-    url: "www.partingflower.com",
-    likes: 4,
-    user: user
-  }
-
-  const mockHandler = jest.fn()
-
-  const component = render(
-    <Blog blog={blog} user={user} updateBlog={mockHandler}/>
-  )
-
-  const button = component.getByText('like')
-  fireEvent.click(button)
-  fireEvent.click(button)
-
-  expect(mockHandler.mock.calls).toHaveLength(2)
-  
 })
