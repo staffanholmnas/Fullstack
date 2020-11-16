@@ -4,8 +4,10 @@ import {
   Switch,
   Route,
   Link,
-  useParams
+  useParams,
+  useHistory
 } from "react-router-dom"
+
 
 const Menu = () => {
   const padding = {
@@ -36,7 +38,7 @@ const Anecdote = ({ anecdotes }) => {
   const id = useParams().id
   const anecdote = anecdotes.find(a => a.id === id)
   if (anecdote === undefined) return <p>No anecdote found</p>
-  return(
+  return (
     <div>
       <h2>{anecdote.content} by {anecdote.author}</h2>
       <p>has {anecdote.votes} votes</p>
@@ -67,11 +69,16 @@ const Footer = () => (
   </div>
 )
 
+let timeoutID
+
 const CreateNew = (props) => {
   const [content, setContent] = useState('')
   const [author, setAuthor] = useState('')
   const [info, setInfo] = useState('')
 
+  const history = useHistory()
+  
+  clearTimeout(timeoutID)
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -81,6 +88,7 @@ const CreateNew = (props) => {
       info,
       votes: 0
     })
+    history.push('/')
   }
 
   return (
@@ -103,7 +111,6 @@ const CreateNew = (props) => {
       </form>
     </div>
   )
-
 }
 
 const App = () => {
@@ -124,17 +131,23 @@ const App = () => {
     }
   ])
 
-  // const [notification, setNotification] = useState('')
+  const [notification, setNotification] = useState('')
 
   const addNew = (anecdote) => {
     anecdote.id = (Math.random() * 10000).toFixed(0)
     setAnecdotes(anecdotes.concat(anecdote))
+    setNotification(`a new anecdote '${anecdote.content}' created!`)
+    timeoutID = setTimeout(() => {
+      setNotification('')
+    }, 10000)
   }
 
-  // const anecdoteById = (id) =>
-  //  anecdotes.find(a => a.id === id)
+  // Voting is not yet implemented, as none of the exercises require it.
 
-  /*const vote = (id) => {
+  /*const anecdoteById = (id) =>
+    anecdotes.find(a => a.id === id)
+
+  const vote = (id) => {
     const anecdote = anecdoteById(id)
 
     const voted = {
@@ -145,11 +158,13 @@ const App = () => {
     setAnecdotes(anecdotes.map(a => a.id === id ? voted : a))
   }*/
 
+
   return (
     <div>
       <Router>
         <h1>Software anecdotes</h1>
         <Menu />
+        {notification}
         <Switch>
           <Route path="/anecdotes/:id">
             <Anecdote anecdotes={anecdotes} />
