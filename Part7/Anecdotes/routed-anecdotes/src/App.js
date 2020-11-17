@@ -70,32 +70,36 @@ const Footer = () => (
   </div>
 )
 
-let timeoutID
-
 const CreateNew = (props) => {
   const content = useField('text')
   const author = useField('text')
   const info = useField('text')
 
   const history = useHistory()
-  
-  clearTimeout(timeoutID)
 
   const handleSubmit = (e) => {
     e.preventDefault()
     props.addNew({
-      content : content.value,
-      author : author.value,
-      info : info.value,
-      votes : 0
+      content: content.value,
+      author: author.value,
+      info: info.value,
+      votes: 0
     })
     history.push('/')
+  }
+
+  const handleReset = (e) => {
+    e.preventDefault()
+    e.target.value = ''
+    content.onChange(e)
+    author.onChange(e)
+    info.onChange(e)
   }
 
   return (
     <div>
       <h2>create a new anecdote</h2>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} onReset={handleReset}>
         <div>
           content
           <input {...content} name='content' />
@@ -108,11 +112,14 @@ const CreateNew = (props) => {
           url for more info
           <input {...info} name='info' />
         </div>
-        <button>create</button>
+        <button type="submit" value="Submit" >Create</button>
+        <button type="reset" value="Reset" >Reset</button>
       </form>
     </div>
   )
 }
+
+let timeoutID
 
 const App = () => {
   const [anecdotes, setAnecdotes] = useState([
@@ -135,6 +142,7 @@ const App = () => {
   const [notification, setNotification] = useState('')
 
   const addNew = (anecdote) => {
+    clearTimeout(timeoutID)
     anecdote.id = (Math.random() * 10000).toFixed(0)
     setAnecdotes(anecdotes.concat(anecdote))
     setNotification(`a new anecdote '${anecdote.content}' created!`)
@@ -142,23 +150,6 @@ const App = () => {
       setNotification('')
     }, 10000)
   }
-
-  // Voting is not yet implemented, as none of the exercises require it.
-
-  /*const anecdoteById = (id) =>
-    anecdotes.find(a => a.id === id)
-
-  const vote = (id) => {
-    const anecdote = anecdoteById(id)
-
-    const voted = {
-      ...anecdote,
-      votes: anecdote.votes + 1
-    }
-
-    setAnecdotes(anecdotes.map(a => a.id === id ? voted : a))
-  }*/
-
 
   return (
     <div>
