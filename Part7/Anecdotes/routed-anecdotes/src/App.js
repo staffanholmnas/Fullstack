@@ -90,10 +90,14 @@ const CreateNew = (props) => {
 
   const handleReset = (e) => {
     e.preventDefault()
-    e.target.value = ''
-    content.onChange(e)
-    author.onChange(e)
-    info.onChange(e)
+    content.reset()
+    author.reset()
+    info.reset()
+  }
+
+  const removeResetField = (object) => {
+    const { reset, ...newObject } = object
+    return newObject
   }
 
   return (
@@ -102,15 +106,15 @@ const CreateNew = (props) => {
       <form onSubmit={handleSubmit} onReset={handleReset}>
         <div>
           content
-          <input {...content} name='content' />
+          <input {...removeResetField(content)} name='content'/>
         </div>
         <div>
           author
-          <input {...author} name='author' />
+          <input {...removeResetField(author)} name='author'/>
         </div>
         <div>
           url for more info
-          <input {...info} name='info' />
+          <input {...removeResetField(info)} name='info'/>
         </div>
         <button type="submit" value="Submit" >Create</button>
         <button type="reset" value="Reset" >Reset</button>
@@ -150,6 +154,7 @@ const App = () => {
       setNotification('')
     }, 10000)
   }
+
 
   return (
     <div>
