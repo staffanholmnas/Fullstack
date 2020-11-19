@@ -17,8 +17,9 @@ const useField = (type) => {
 
 const useCountry = (name) => {
   const [country, setCountry] = useState(null)
-  if (name === '') name = 'sweden'
+  
   useEffect(() => {
+    name === '' ? setCountry(null) :
     axios
       .get(`https://restcountries.eu/rest/v2/name/${name}?fullText=true`)
       .then(response => {
