@@ -16,7 +16,7 @@ const App = () => {
   const [user, setUser] = useState(null)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  //const [notification, setNotification] = useState(null)
+  
   const dispatch = useDispatch()
 
   const blogFormRef = React.createRef()
@@ -79,7 +79,7 @@ const App = () => {
       await blogService.remove(id)
       setBlogs(blogs.filter(b => b.id !== id))
     }
-    notifyWith(`Deleted blog ${blogToRemove.title} by ${blogToRemove.author}`, 'error')
+    notifyWith(`Deleted blog ${blogToRemove.title} by ${blogToRemove.author}`)
   }
 
   const handleLogout = () => {

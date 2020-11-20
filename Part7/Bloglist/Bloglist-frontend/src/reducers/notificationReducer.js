@@ -15,7 +15,7 @@ let timeoutID
 
 export const showNotification = (notification, time) => {
   return async dispatch => {
-    clearTimeout(timeoutID) // Resets timer for every new notification
+    clearTimeout(timeoutID)
     await dispatch({
       type: 'SHOW_NOTIFICATION',
       data: notification,
