@@ -8,12 +8,16 @@ import blogService from './services/blogs'
 import loginService from './services/login'
 import storage from './utils/storage'
 
+import { useDispatch } from 'react-redux'
+import { showNotification } from './reducers/notificationReducer'
+
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const [notification, setNotification] = useState(null)
+  //const [notification, setNotification] = useState(null)
+  const dispatch = useDispatch()
 
   const blogFormRef = React.createRef()
 
@@ -29,12 +33,8 @@ const App = () => {
   }, [])
 
   const notifyWith = (message, type='success') => {
-    setNotification({
-      message, type
-    })
-    setTimeout(() => {
-      setNotification(null)
-    }, 5000)
+    const msg = {message, type}
+    dispatch(showNotification(msg, 5))
   }
 
   const handleLogin = async (event) => {
@@ -79,6 +79,7 @@ const App = () => {
       await blogService.remove(id)
       setBlogs(blogs.filter(b => b.id !== id))
     }
+    notifyWith(`Deleted blog ${blogToRemove.title} by ${blogToRemove.author}`, 'error')
   }
 
   const handleLogout = () => {
@@ -91,7 +92,7 @@ const App = () => {
       <div>
         <h2>login to application</h2>
 
-        <Notification notification={notification} />
+        <Notification />
 
         <form onSubmit={handleLogin}>
           <div>
@@ -122,7 +123,7 @@ const App = () => {
     <div>
       <h2>blogs</h2>
 
-      <Notification notification={notification} />
+      <Notification />
 
       <p>
         {user.name} logged in <button onClick={handleLogout}>logout</button>
