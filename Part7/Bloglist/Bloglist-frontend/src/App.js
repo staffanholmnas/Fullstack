@@ -4,7 +4,7 @@ import Notification from './components/Notification'
 import Togglable from './components/Togglable'
 import NewBlog from './components/NewBlog'
 
-import blogService from './services/blogs'
+//import blogService from './services/blogs'
 import loginService from './services/login'
 import storage from './utils/storage'
 
@@ -57,10 +57,10 @@ const App = () => {
 
   const createBlog = async (blog) => {
     try {
-      const newBlog = await blogService.create(blog)
+      //const newBlog = await blogService.create(blog)
       blogFormRef.current.toggleVisibility()
       //setBlogs(blogs.concat(newBlog))
-      dispatch(addBlog(newBlog))
+      dispatch(addBlog(blog))
       notifyWith(`a new blog '${blog.title}' by ${blog.author} added!`)
     } catch(exception) {
       console.log(exception)
