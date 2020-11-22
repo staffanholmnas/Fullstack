@@ -10,13 +10,16 @@ import storage from './utils/storage'
 import { useSelector, useDispatch } from 'react-redux'
 import { showNotification } from './reducers/notificationReducer'
 import { initializeBlogs, addBlog, giveLike, removeBlog } from './reducers/blogReducer'
+import { userSet, userNull } from './reducers/userReducer'
+
 
 const App = () => {
-  const [user, setUser] = useState(null)
+
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
   const blogs = useSelector(state => state.blogs)
+  const user = useSelector(state => state.user)
 
   const dispatch = useDispatch()
 
@@ -28,8 +31,8 @@ const App = () => {
 
   useEffect(() => {
     const user = storage.loadUser()
-    setUser(user)
-  }, [])
+    dispatch(userSet(user))
+  }, [dispatch])
 
   const notifyWith = (message, type='success') => {
     const msg = {message, type}
@@ -45,7 +48,7 @@ const App = () => {
 
       setUsername('')
       setPassword('')
-      setUser(user)
+      dispatch(userSet(user))
       notifyWith(`${user.name} welcome back!`)
       storage.saveUser(user)
     } catch(exception) {
@@ -79,7 +82,7 @@ const App = () => {
   }
 
   const handleLogout = () => {
-    setUser(null)
+    dispatch(userNull())
     storage.logoutUser()
   }
 
