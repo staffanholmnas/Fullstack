@@ -126,14 +126,20 @@ const App = () => {
     marginBottom: 5
   }
 
+  const background = {
+    backgroundColor: 'lightgrey'
+  }
+
   return (
     <Router>
       <div>
-        <h2>Blogs</h2>
-        <Notification />
-        <p>
+        <p style={background}>
+        <Link to="/blogs">Blogs</Link> &nbsp;&nbsp;
+        <Link to="/users">Users</Link> &nbsp;&nbsp;
           {user.name} is logged in <button onClick={handleLogout}>Logout</button>
         </p>
+        <Notification />
+        <h2>Blog app</h2>
         <Switch>
           <Route path="/users">
             <Users />
