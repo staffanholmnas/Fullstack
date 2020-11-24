@@ -32,22 +32,18 @@ const Users = () => {
                 <tr><td></td>
                   <td><b>Blogs created</b></td>
                 </tr>
-                <tr>
-                  <td>{users.map(user => {
-                    return (
-                      <div key={user.id}>
+                {users.map(user => {
+                  return (
+                    <tr key={user.id}>
+                      <td >
                         <Link to={`/users/${user.id}`}>{user.name}</Link>
-                      </div>
-                    )
-                  })}</td>
-                  <td>{users.map(user => {
-                    return (
-                      <div key={user.id}>
+                      </td>
+                      <td >
                         {user.blogs.length}
-                      </div>
-                    )
-                  })}</td>
-                </tr>
+                      </td>
+                    </tr>
+                  )
+                })}
               </tbody>
             </table>
           </div>
