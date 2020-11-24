@@ -4,15 +4,12 @@ import Notification from './components/Notification'
 import Users from './components/Users'
 import Togglable from './components/Togglable'
 import NewBlog from './components/NewBlog'
-
 import loginService from './services/login'
 import storage from './utils/storage'
-
 import { useSelector, useDispatch } from 'react-redux'
 import { showNotification } from './reducers/notificationReducer'
 import { initializeBlogs, addBlog, giveLike, removeBlog } from './reducers/blogReducer'
 import { userSet, userNull } from './reducers/userReducer'
-
 import {
   BrowserRouter as Router,
   Switch, Route
