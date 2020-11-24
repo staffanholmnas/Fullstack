@@ -19,10 +19,10 @@ const NewBlog = (props) => {
 
   return (
     <div>
-      <h2>create new</h2>
+      <h2>Create new</h2>
       <form onSubmit={handleNewBlog}>
         <div>
-          author
+          Author
           <input
             id='author'
             value={author}
@@ -30,7 +30,7 @@ const NewBlog = (props) => {
           />
         </div>
         <div>
-          title
+          Title
           <input
             id='title'
             value={title}
@@ -38,7 +38,7 @@ const NewBlog = (props) => {
           />
         </div>
         <div>
-          url
+          Url
           <input
             id='url'
             value={url}

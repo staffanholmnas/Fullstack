@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import Blog from './components/Blog'
 import Notification from './components/Notification'
 import Users from './components/Users'
+import Blog from './components/Blog'
 import Togglable from './components/Togglable'
 import NewBlog from './components/NewBlog'
 import loginService from './services/login'
@@ -10,10 +10,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { showNotification } from './reducers/notificationReducer'
 import { initializeBlogs, addBlog, giveLike, removeBlog } from './reducers/blogReducer'
 import { userSet, userNull } from './reducers/userReducer'
-import {
-  BrowserRouter as Router,
-  Switch, Route
-} from "react-router-dom"
+import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom"
 
 
 const App = () => {
@@ -92,13 +89,13 @@ const App = () => {
   if (!user) {
     return (
       <div>
-        <h2>login to application</h2>
+        <h2>Log-in to application</h2>
 
         <Notification />
 
         <form onSubmit={handleLogin}>
           <div>
-            username
+            Username
             <input
               id='username'
               value={username}
@@ -106,14 +103,14 @@ const App = () => {
             />
           </div>
           <div>
-            password
+            Password
             <input
               id='password'
               value={password}
               onChange={({ target }) => setPassword(target.value)}
             />
           </div>
-          <button id='login'>login</button>
+          <button id='login'>Log in</button>
         </form>
       </div>
     )
@@ -121,30 +118,39 @@ const App = () => {
 
   const byLikes = (b1, b2) => b2.likes - b1.likes
 
+  const blogStyle = {
+    paddingTop: 10,
+    paddingLeft: 2,
+    border: 'solid',
+    borderWidth: 1,
+    marginBottom: 5
+  }
+
   return (
     <Router>
       <div>
-        <h2>blogs</h2>
+        <h2>Blogs</h2>
         <Notification />
         <p>
-          {user.name} logged in <button onClick={handleLogout}>logout</button>
+          {user.name} is logged in <button onClick={handleLogout}>Logout</button>
         </p>
         <Switch>
           <Route path="/users">
             <Users />
           </Route>
+          <Route path="/blogs/:id">
+            <Blog handleLike={handleLike}
+              handleRemove={handleRemove}
+              owner={user.username} />
+          </Route>
           <Route path="/">
-            <Togglable buttonLabel='create new blog' ref={blogFormRef}>
+            <Togglable buttonLabel='Create new blog' ref={blogFormRef}>
               <NewBlog createBlog={createBlog} />
             </Togglable>
             {blogs.sort(byLikes).map(blog =>
-              <Blog
-                key={blog.id}
-                blog={blog}
-                handleLike={handleLike}
-                handleRemove={handleRemove}
-                own={user.username === blog.user.username}
-              />
+              <Link to={`/blogs/${blog.id}`} key={blog.id}>
+                <div style={blogStyle}>{blog.title}</div>
+              </Link>
             )}
           </Route>
         </Switch>
