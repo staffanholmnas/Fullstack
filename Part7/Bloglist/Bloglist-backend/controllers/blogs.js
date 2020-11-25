@@ -36,6 +36,26 @@ router.put('/:id', async (request, response) => {
   response.json(updatedBlog.toJSON())
 })
 
+router.post('/:id/comments', async (request, response) => {
+  const body = request.body
+  
+  if (!body.comments) {
+    return response.status(400).json({
+      error: 'comment missing'
+    })
+  }
+
+  const blog = await Blog.findById(request.params.id)
+
+  const comment = body.comments
+  
+  blog.comments.push(comment)
+  
+  const savedBlog = await blog.save()
+  response.status(201).json(savedBlog)
+
+})
+
 router.post('/', async (request, response) => {
   const blog = new Blog(request.body)
 
