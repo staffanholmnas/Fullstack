@@ -9,8 +9,10 @@ const UserBlogs = ({ users }) => {
   
   return (
     <div>
+      <br></br>
       <h2>{user.name}</h2>
-      <h3>Added blogs</h3>
+      <br></br>
+      <h4>Added blogs</h4>
       <ul>
         {user.blogs.map(blog => <li key={blog.id}> {blog.title}</li>)}
       </ul>

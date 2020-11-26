@@ -5,6 +5,7 @@ import {
   BrowserRouter as Router,
   Switch, Route, Link
 } from "react-router-dom"
+import { Table } from 'react-bootstrap'
 
 const Users = () => {
   const [users, setUsers] = useState([])
@@ -27,7 +28,7 @@ const Users = () => {
         <Route path="/">
           <div>
             <h2>Users</h2>
-            <table>
+            <Table striped>
               <tbody>
                 <tr><td></td>
                   <td><b>Blogs created</b></td>
@@ -45,7 +46,7 @@ const Users = () => {
                   )
                 })}
               </tbody>
-            </table>
+            </Table>
           </div>
         </Route>
       </Switch>

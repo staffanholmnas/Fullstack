@@ -5,12 +5,14 @@ import Blog from './components/Blog'
 import Togglable from './components/Togglable'
 import NewBlog from './components/NewBlog'
 import loginService from './services/login'
+import blogService from './services/blogs'
 import storage from './utils/storage'
 import { useSelector, useDispatch } from 'react-redux'
 import { showNotification } from './reducers/notificationReducer'
 import { initializeBlogs, addBlog, giveLike, removeBlog } from './reducers/blogReducer'
 import { userSet, userNull } from './reducers/userReducer'
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom"
+import { Table, Button, Form, Nav, Navbar } from 'react-bootstrap'
 
 
 const App = () => {
@@ -52,18 +54,21 @@ const App = () => {
       notifyWith(`${user.name} welcome back!`)
       storage.saveUser(user)
     } catch (exception) {
-      notifyWith('wrong username/password', 'error')
+      notifyWith('Wrong username or password', 'error')
     }
   }
 
   const createBlog = async (blog) => {
-    try {
+
       blogFormRef.current.toggleVisibility()
-      dispatch(addBlog(blog))
-      notifyWith(`a new blog '${blog.title}' by ${blog.author} added!`)
-    } catch (exception) {
-      console.log(exception)
-    }
+      try {
+      const newBlog = await blogService.create(blog)
+      dispatch(addBlog(newBlog))
+      } catch (error) {
+       return notifyWith(error.response.data.error, 'error')
+      }
+      
+      notifyWith(`A new blog '${blog.title}' by ${blog.author} added!`)
   }
 
   const handleLike = async (id) => {
@@ -88,58 +93,71 @@ const App = () => {
 
   if (!user) {
     return (
-      <div>
+      <div className="container">
         <h2>Log-in to application</h2>
 
         <Notification />
 
-        <form onSubmit={handleLogin}>
-          <div>
-            Username
-            <input
-              id='username'
-              value={username}
-              onChange={({ target }) => setUsername(target.value)}
-            />
-          </div>
-          <div>
-            Password
-            <input
-              id='password'
-              value={password}
-              onChange={({ target }) => setPassword(target.value)}
-            />
-          </div>
-          <button id='login'>Log in</button>
-        </form>
+        <Form onSubmit={handleLogin}>
+          <Form.Group>
+            <div>
+              <Form.Label>Username:</Form.Label>
+              <Form.Control
+                type='text'
+                name='username'
+                id='username'
+                value={username}
+                onChange={({ target }) => setUsername(target.value)}
+              />
+            </div>
+            <div>
+              <Form.Label>Password:</Form.Label>
+              <Form.Control
+                type='password'
+                id='password'
+                value={password}
+                onChange={({ target }) => setPassword(target.value)}
+              />
+            </div>
+            <br></br>
+            <Button variant="primary" type="submit" id='login'>Log in</Button>
+          </Form.Group>
+        </Form>
       </div>
     )
   }
 
   const byLikes = (b1, b2) => b2.likes - b1.likes
 
-  const blogStyle = {
-    paddingTop: 10,
-    paddingLeft: 2,
-    border: 'solid',
-    borderWidth: 1,
-    marginBottom: 5
+  const padding = {
+    padding: 5,
+    color: 'white'
   }
 
-  const background = {
-    backgroundColor: 'lightgrey'
-  }
 
   return (
     <Router>
-      <div>
-        <p style={background}>
-        <Link to="/blogs">Blogs</Link> &nbsp;&nbsp;
-        <Link to="/users">Users</Link> &nbsp;&nbsp;
-          {user.name} is logged in <button onClick={handleLogout}>Logout</button>
-        </p>
+      <div className="container">
+        <Navbar collapseOnSelect expand="md" bg="info" variant="dark">
+          <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+          <Navbar.Collapse id="responsive-navbar-nav">
+            <Nav className="mr-auto">
+              <Nav.Link href="#" as="span">
+                <Link style={padding} to="/blogs">Blogs</Link>
+              </Nav.Link>
+              <Nav.Link href="#" as="span">
+                <Link style={padding} to="/users">Users</Link>
+              </Nav.Link>
+            </Nav>
+            <div style={padding}>
+              {user.name} is logged in <Button variant="secondary" onClick={handleLogout}>Log out</Button>
+            </div>
+          </Navbar.Collapse>
+        </Navbar>
         <Notification />
-        <h2>Blog app</h2>
+        <br></br>
+        <h2>BLOG APP</h2>
+        <br></br>
         <Switch>
           <Route path="/users">
             <Users />
@@ -153,11 +171,23 @@ const App = () => {
             <Togglable buttonLabel='Create new blog' ref={blogFormRef}>
               <NewBlog createBlog={createBlog} />
             </Togglable>
-            {blogs.sort(byLikes).map(blog =>
-              <Link to={`/blogs/${blog.id}`} key={blog.id}>
-                <div style={blogStyle}>{blog.title}</div>
-              </Link>
-            )}
+            <p></p>
+            <Table striped>
+              <tbody>
+                {blogs.sort(byLikes).map(blog =>
+                  <tr key={blog.id}>
+                    <td>
+                      <Link to={`/blogs/${blog.id}`} key={blog.id}>
+                        <div>{blog.title}</div>
+                      </Link>
+                    </td>
+                    <td>
+                      {blog.user.name}
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </Table>
           </Route>
         </Switch>
       </div>

@@ -41,7 +41,7 @@ router.post('/:id/comments', async (request, response) => {
   
   if (!body.comments) {
     return response.status(400).json({
-      error: 'comment missing'
+      error: 'Cannot add empty comment'
     })
   }
 
@@ -68,7 +68,7 @@ router.post('/', async (request, response) => {
   const user = await User.findById(decodedToken.id)
 
   if (!blog.url || !blog.title) {
-    return response.status(400).send({ error: 'title or url missing ' })
+    return response.status(400).send({ error: 'Title or URL is missing' })
   }
 
   if (!blog.likes) {
